@@ -18,6 +18,6 @@ public class Comentario {
 
     @Override
     public String toString() {
-        return this.texto;
+        return this.texto + "(" + this.autor.getNome() + ")";
     }
 }
