@@ -26,7 +26,7 @@ public class Pessoa {
         return presentation;
     }
 
-    public String toStringReduced() {
+    public String toStringReduzido() {
         return this.nome + " – " + this.cpf;
     }
 
