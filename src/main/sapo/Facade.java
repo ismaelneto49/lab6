@@ -1,7 +1,11 @@
 package sapo;
 
 import sapo.controllers.AtividadeController;
+import sapo.controllers.TarefaController;
+import sapo.controllers.PessoaController;
 import sapo.entities.Atividade;
+
+import sapo.entities.Pessoa;
 
 import java.util.HashMap;
 import java.util.Optional;
@@ -9,11 +13,14 @@ import java.util.Optional;
 public class Facade {
 
     private AtividadeController atividadeController;
+    private TarefaController tarefaController;
     private PessoaController pessoaController;
 
     public Facade() {
         this.atividadeController = new AtividadeController(new HashMap<>());
+        this.tarefaController = new TarefaController(new HashMap<>(), this.atividadeController);
         this.pessoaController = new PessoaController(new HashMap<>());
+
     }
 
     public void cadastrarPessoa(String cpf, String nome, String[] habilidades) {
@@ -77,6 +84,37 @@ public class Facade {
 
     public void alterarResponsavelAtividade(String id, String cpf) {
         this.atividadeController.alterarResponsavelAtividade(id, cpf);
+    }
+
+    public String cadastrarTarefa(String idAtividade, String nome, String[] habilidadesRecomendadas) {
+        return this.tarefaController.cadastrarTarefa(idAtividade, nome, habilidadesRecomendadas);
+    }
+
+    public void alterarNomeTarefa(String idTarefa, String novoNome) {
+        this.tarefaController.alterarNomeTarefa(idTarefa, novoNome);
+    }
+
+    public void alterarHabilidadesTarefa(String idTarefa, String[] habilidades) {
+        this.tarefaController.alterarHabilidadesTarefa(idTarefa, habilidades);
+    }
+
+    public void adicionarHorasTarefa(String idTarefa, int horas) {
+        this.tarefaController.adicionarHorasTarefa(idTarefa, horas);
+    }
+
+    public void removerHorasTarefa(String idTarefa, int horas) {
+        this.tarefaController.removerHorasTarefa(idTarefa, horas);
+    }
+
+    public String exibirTarefa(String idTarefa) {
+        return this.tarefaController.exibirTarefa(idTarefa);
+    }
+    public void associarPessoaTarefa(String cpf, String idTarefa) {
+        this.tarefaController.associarPessoaTarefa(cpf, idTarefa);
+    }
+
+    public void removerPessoaTarefa(String cpf, String idTarefa) {
+        this.tarefaController.removerPessoaTarefa(cpf, idTarefa);
     }
 
 
