@@ -26,7 +26,7 @@ public class Pessoa {
         return presentation;
     }
 
-    public String toStringReduced() {
+    public String toStringReduzido() {
         return this.nome + " – " + this.cpf;
     }
 
@@ -47,10 +47,12 @@ public class Pessoa {
     }
 
     public String listarComentarios() {
-        String apresentacao = this.nome + " – " + this.cpf + "\nComentários:";
+        StringBuilder builder = new StringBuilder();
+        builder.append(this.nome + " – " + this.cpf);
+        builder.append("\nComentários:");
         for (Comentario c : this.comentarios) {
-            apresentacao += "\n-- " + c.toString();
+            builder.append("\n-- " + c.toString());
         }
-        return apresentacao;
+        return builder.toString();
     }
 }

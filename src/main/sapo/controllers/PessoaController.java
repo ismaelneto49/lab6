@@ -75,13 +75,13 @@ public class PessoaController {
 
     private void validarContemCpf(String cpf) {
         if (!this.pessoas.keySet().contains(cpf)) {
-            throw new NoSuchElementException("Given cpf does not belong to any Pessoa!");
+            throw new NoSuchElementException("CPF fornecido não pertence a nenhuma Pessoa");
         }
     }
 
     private void validarCampoVazio(String field, String fieldName) {
         if (field == null || field.isBlank()) {
-            String message = "Field " + fieldName.trim() + " cannot be empty!";
+            String message = "Campo " + fieldName.trim() + " não pode ser vazio";
             throw new IllegalArgumentException(message);
         }
     }
