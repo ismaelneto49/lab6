@@ -1,10 +1,12 @@
 package sapo.entities;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
 public class Atividade {
-    private Set<Tarefa> tarefas;
+    private List<Tarefa> tarefas;
     private Pessoa responsavel;
     private String nome;
     private String descricao;
@@ -16,6 +18,7 @@ public class Atividade {
         this.nome = nome;
         this.descricao = descricao;
         this.responsavel = responsavel;
+        this.tarefas = new ArrayList<Tarefa>();
     }
 
     public String getNome() {
@@ -31,18 +34,39 @@ public class Atividade {
     }
 
     public void cadastrarTarefa(Tarefa tarefa) {
+        if (this.status == AtividadeStatus.ENCERRADA || this.status == AtividadeStatus.DESATIVADA) {
+            throw new IllegalStateException("A atividade não pode receber novas tarefas pois seu status atual é " + this.status);
+        }
         this.tarefas.add(tarefa);
     }
 
     public void encerrar() {
+        if (this.status == AtividadeStatus.ENCERRADA) {
+            throw new IllegalStateException("A atividade " + this.id + " já está encerrada.");
+        }
+        if (this.status == AtividadeStatus.DESATIVADA) {
+            throw new IllegalStateException("A atividade " + this.id + " não pode ser encerrada pois está desativada.");
+        }
+        if (this.getQuantidadeTarefasPendentes() > 0) {
+            throw new IllegalStateException("A atividade " + this.id + " possui tarefas pendentes.");
+        }
         this.status = AtividadeStatus.ENCERRADA;
     }
 
     public void desativar() {
+        if (this.status == AtividadeStatus.DESATIVADA) {
+            throw new IllegalStateException("A atividade " + this.id + " já está desativada.");
+        }
+        if (this.getQuantidadeTarefasPendentes() > 0) {
+            throw new IllegalStateException("A atividade " + this.id + " possui tarefas pendentes.");
+        }
         this.status = AtividadeStatus.DESATIVADA;
     }
 
     public void reabrir() {
+        if (this.status == AtividadeStatus.ATIVADA) {
+            throw new IllegalStateException("A atividade " + this.id + " já está aberta");
+        }
         this.status = AtividadeStatus.ATIVADA;
     }
 
@@ -50,36 +74,37 @@ public class Atividade {
         StringBuilder builder = new StringBuilder();
         builder.append(this.id + ":" + this.nome + "\n");
         if (Objects.nonNull(this.responsavel)) {
+            // TODO: toStringDTO() of Pessoa
             builder.append("Responsável: " + "Pessoa.toString(to String for listing)" + "\n");
         }
         builder.append("===" + "\n");
         builder.append(this.descricao + "\n");
         builder.append("===" + "\n");
         builder.append("Tarefas: " + this.getQuantidadeTarefasConcluidas() + "/" + this.getQuantidadeTarefasTotal() + "\n");
-        String[] tarefasPendentes = getMaisRecentesTarefasPendentes(3);
-        for (int i = 0; i < tarefasPendentes.length; i++) {
-            builder.append("- " + tarefasPendentes[i] + "\n");
+
+        for (int i = this.tarefas.size() - 1; i > Math.max(this.tarefas.size() - 4, 0); i--) {
+            builder.append("- " + this.tarefas.get(i) + "\n");
         }
 
         return builder.toString();
     }
 
     private int getQuantidadeTarefasConcluidas() {
+        int quantidadeTarefasConcluidas = 0;
+        for (Tarefa tarefa : this.tarefas) {
+            if (tarefa.getIsConcluida()) {
+                quantidadeTarefasConcluidas ++;
+            }
+        }
         return 5;
     }
 
-    private int getQuantidadeTarefasTotal() {
-        return 20;
+    private int getQuantidadeTarefasPendentes() {
+        return this.getQuantidadeTarefasTotal() - this.getQuantidadeTarefasConcluidas();
     }
 
-    private String[] getMaisRecentesTarefasPendentes(int quantidade) {
-        String[] tarefasPendentes = new String[quantidade];
-
-        for (int i = 0; i < tarefasPendentes.length; i ++) {
-            tarefasPendentes[i] = i + "";
-        }
-
-        return tarefasPendentes;
+    private int getQuantidadeTarefasTotal() {
+        return this.tarefas.size();
     }
 
 }
