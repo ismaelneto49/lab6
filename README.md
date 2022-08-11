@@ -4,7 +4,7 @@
 
 Ismael Neto - 121111104
 
-Cristovão Neto - Matricula 2
+Cristovão Neto - 121110199
 
 ## Responsabilidades
 
