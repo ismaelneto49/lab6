@@ -78,7 +78,10 @@ public class Tarefa {
             builder.append("===" + "\n");
             builder.append("Equipe" + "\n");
             // TODO: toStringDTO() of Pessoa
-            builder.append("Pessoa.toString(to String for listing)" + "\n");
+            for (Pessoa pessoa : this.pessoasResponsaveis) {
+                builder.append(pessoa.toStringReduzido() + "\n");
+            }
+
             return builder.toString();
         }
 

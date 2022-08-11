@@ -9,8 +9,9 @@ import java.util.*;
 public class TarefaController {
     private Map<Atividade, Map<String, Tarefa>> tarefas;
     private AtividadeController atividadeController;
+    private PessoaController pessoaController;
 
-    public TarefaController(Map<Atividade, Map<String, Tarefa>> tarefas, AtividadeController atividadeController) {
+    public TarefaController(Map<Atividade, Map<String, Tarefa>> tarefas, AtividadeController atividadeController, PessoaController pessoaController) {
         this.tarefas = tarefas;
         this.atividadeController = atividadeController;
     }
@@ -59,15 +60,13 @@ public class TarefaController {
     }
 
     public void associarPessoaTarefa(String cpf, String idTarefa) {
-        // TODO: get Pessoa by CPF
-        Pessoa pessoa = new Pessoa();
+        Pessoa pessoa = pessoaController.recuperarPessoa(cpf);
         Tarefa tarefa = this.validarIdTarefa(idTarefa);
         tarefa.adicionarPessoaResponsavel(pessoa);
     }
 
     public void removerPessoaTarefa(String cpf, String idTarefa) {
-        // TODO: get Pessoa by CPF
-        Pessoa pessoa = new Pessoa();
+        Pessoa pessoa = pessoaController.recuperarPessoa(cpf);
         Tarefa tarefa = this.validarIdTarefa(idTarefa);
         tarefa.removerPessoaResponsavel(pessoa);
     }

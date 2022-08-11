@@ -74,8 +74,7 @@ public class Atividade {
         StringBuilder builder = new StringBuilder();
         builder.append(this.id + ":" + this.nome + "\n");
         if (Objects.nonNull(this.responsavel)) {
-            // TODO: toStringDTO() of Pessoa
-            builder.append("Responsável: " + "Pessoa.toString(to String for listing)" + "\n");
+            builder.append("Responsável: " + this.responsavel.toStringReduzido() + "\n");
         }
         builder.append("===" + "\n");
         builder.append(this.descricao + "\n");
