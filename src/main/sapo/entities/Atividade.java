@@ -93,10 +93,10 @@ public class Atividade {
         int quantidadeTarefasConcluidas = 0;
         for (Tarefa tarefa : this.tarefas) {
             if (tarefa.getIsConcluida()) {
-                quantidadeTarefasConcluidas ++;
+                quantidadeTarefasConcluidas += 1;
             }
         }
-        return 5;
+        return quantidadeTarefasConcluidas;
     }
 
     private int getQuantidadeTarefasPendentes() {
