@@ -1,11 +1,14 @@
 package sapo;
 
+import sapo.controllers.AtividadeController;
 import sapo.controllers.TarefaController;
 import sapo.controllers.PessoaController;
+import sapo.entities.Atividade;
 
 import sapo.entities.Pessoa;
 
 import java.util.HashMap;
+import java.util.Optional;
 
 public class Facade {
 
@@ -50,6 +53,37 @@ public class Facade {
 
     public String listarComentarios(String cpf) {
         return this.pessoaController.listarComentarios(cpf);
+    }
+
+    public String cadastrarAtividade(String nome, String descricao, String cpf) {
+        return this.atividadeController.cadastrarAtividade(nome, descricao, cpf);
+    }
+
+    public Optional<Atividade> recuperarAtividade(String id){
+        return this.atividadeController.recuperarAtividade(id);
+    }
+
+    public void encerrarAtividade(String id) {
+        this.atividadeController.encerrarAtividade(id);
+    }
+
+    public void desativarAtividade(String id) {
+        this.atividadeController.desativarAtividade(id);
+    }
+    public void reabrirAtividade(String id) {
+        this.atividadeController.reabrirAtividade(id);
+    }
+
+    public String exibirAtividade(String id) {
+        return this.atividadeController.exibirAtividade(id);
+    }
+
+    public void alterarDescricaoAtividade(String id, String descricao) {
+        this.atividadeController.alterarDescricaoAtividade(id, descricao);
+    }
+
+    public void alterarResponsavelAtividade(String id, String cpf) {
+        this.atividadeController.alterarResponsavelAtividade(id, cpf);
     }
 
     public String cadastrarTarefa(String idAtividade, String nome, String[] habilidadesRecomendadas) {
