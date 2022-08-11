@@ -16,8 +16,8 @@ public class PessoaController {
     }
 
     public void cadastrarPessoa(String cpf, String nome, String[] habilidades) {
-        this.validateFieldIsBlank(cpf, "cpf");
-        this.validateFieldIsBlank(nome, "nome");
+        this.validarCampoVazio(cpf, "cpf");
+        this.validarCampoVazio(nome, "nome");
 
         Pessoa p = new Pessoa(cpf, nome, habilidades);
         this.pessoas.put(cpf, p);
@@ -25,41 +25,41 @@ public class PessoaController {
 
 
     public Pessoa recuperarPessoa(String cpf) {
-        this.validateContainsCpf(cpf);
+        this.validarContemCpf(cpf);
 
         return this.pessoas.get(cpf);
     }
 
     public String exibirPessoa(String cpf) {
-        this.validateContainsCpf(cpf);
+        this.validarContemCpf(cpf);
 
         return this.recuperarPessoa(cpf).toString();
     }
 
     public void alterarNomePessoa(String cpf, String nome) {
-        this.validateContainsCpf(cpf);
-        this.validateFieldIsBlank(nome, "nome");
+        this.validarContemCpf(cpf);
+        this.validarCampoVazio(nome, "nome");
 
         Pessoa p = this.recuperarPessoa(cpf);
         p.setNome(nome);
     }
 
     public void alterarHabilidadesPessoa(String cpf, String[] habilidades) {
-        this.validateContainsCpf(cpf);
+        this.validarContemCpf(cpf);
 
         this.recuperarPessoa(cpf).setHabilidades(habilidades);
     }
 
     public void removerPessoa(String cpf) {
-        this.validateContainsCpf(cpf);
+        this.validarContemCpf(cpf);
 
         this.pessoas.remove(cpf);
     }
 
     public void adicionarComentario(String destinatarioCpf, String comentario, String autorCpf) {
-        this.validateContainsCpf(destinatarioCpf);
-        this.validateContainsCpf(autorCpf);
-        this.validateFieldIsBlank(comentario, "comentario");
+        this.validarContemCpf(destinatarioCpf);
+        this.validarContemCpf(autorCpf);
+        this.validarCampoVazio(comentario, "comentario");
 
         Pessoa autor = this.recuperarPessoa(autorCpf);
         Pessoa destinatario = this.recuperarPessoa(destinatarioCpf);
@@ -68,18 +68,18 @@ public class PessoaController {
     }
 
     public String listarComentarios(String cpf) {
-        this.validateContainsCpf(cpf);
+        this.validarContemCpf(cpf);
 
         return this.recuperarPessoa(cpf).listarComentarios();
     }
 
-    private void validateContainsCpf(String cpf) {
+    private void validarContemCpf(String cpf) {
         if (!this.pessoas.keySet().contains(cpf)) {
             throw new NoSuchElementException("Given cpf does not belong to any Pessoa!");
         }
     }
 
-    private void validateFieldIsBlank(String field, String fieldName) {
+    private void validarCampoVazio(String field, String fieldName) {
         if (field == null || field.isBlank()) {
             String message = "Field " + fieldName.trim() + " cannot be empty!";
             throw new IllegalArgumentException(message);

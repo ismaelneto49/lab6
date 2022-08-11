@@ -43,10 +43,10 @@ public class Pessoa {
     }
 
     public String listarComentarios() {
-        String presentation = this.nome + " – " + this.cpf + "\nComentários:";
+        String apresentacao = this.nome + " – " + this.cpf + "\nComentários:";
         for (Comentario c : this.comentarios) {
-            presentation += "\n-- " + c.toString();
+            apresentacao += "\n-- " + c.toString();
         }
-        return presentation;
+        return apresentacao;
     }
 }
