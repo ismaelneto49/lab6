@@ -11,7 +11,6 @@ public class Tarefa {
     private String[] habilidades;
     private Set<Pessoa> pessoasResponsaveis;
 
-
         public Tarefa(String id, String nome, int duracao, Atividade atividade, String[] habilidades) {
             this.id = id;
             this.nome = nome;
@@ -33,26 +32,41 @@ public class Tarefa {
         }
 
         public void concluirTarefa() {
+            if (this.isConcluida) {
+                throw new IllegalStateException("A tarefa já está concluída");
+            }
             this.isConcluida = true;
         }
 
         public void adicionarPessoaResponsavel(Pessoa pessoa) {
+            if (this.isConcluida) {
+                throw new IllegalStateException("Não é possível adicionar pessoa responsável em uma tarefa já concluída");
+            }
             this.pessoasResponsaveis.add(pessoa);
         }
 
         public void removerPessoaResponsavel(Pessoa pessoa) {
+            if (this.isConcluida) {
+                throw new IllegalStateException("Não é possível remover pessoa responsável em uma tarefa já concluída");
+            }
             this.pessoasResponsaveis.remove(pessoa);
         }
 
         public void adicionarHoras(int horas) {
+            if (this.isConcluida) {
+                throw new IllegalStateException("Não é possível adicionar horas em uma tarefa já concluída");
+            }
             this.duracao = this.duracao + horas;
         }
 
         public void removerHoras(int horas) {
+            if (this.isConcluida) {
+                throw new IllegalStateException("Não é possível remover horas em uma tarefa já concluída");
+            }
             this.duracao = this.duracao - horas;
         }
 
-        public String toStringDTO() {
+        public String toStringReduzido() {
             return this.nome + " - " + this.id + "\n";
         }
 
