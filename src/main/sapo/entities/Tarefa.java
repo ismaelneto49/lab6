@@ -21,6 +21,9 @@ public class Tarefa {
             this.habilidades = habilidades;
         }
 
+        public boolean getIsConcluida() {
+            return this.isConcluida;
+        }
         public void setNome(String novoNome) {
             this.nome = novoNome;
         }
@@ -49,6 +52,10 @@ public class Tarefa {
             this.duracao = this.duracao - horas;
         }
 
+        public String toStringDTO() {
+            return this.nome + " - " + this.id + "\n";
+        }
+
         public String toString() {
             StringBuilder builder = new StringBuilder();
             builder.append(this.nome + " - " + this.id + "\n");
@@ -56,6 +63,7 @@ public class Tarefa {
             builder.append(String.join(", ", this.habilidades) + "\n");
             builder.append("===" + "\n");
             builder.append("Equipe" + "\n");
+            // TODO: toStringDTO() of Pessoa
             builder.append("Pessoa.toString(to String for listing)" + "\n");
             return builder.toString();
         }
