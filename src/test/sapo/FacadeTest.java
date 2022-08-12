@@ -55,7 +55,7 @@ public class FacadeTest {
         try {
             this.facade.desativarAtividade(id);
         } catch (IllegalStateException ise) {
-            assertEquals("Não é possivel encerrar a atividade " + id + ", já que está desativada.", ise.getMessage());
+            assertEquals("A atividade " + id + " não pode ser encerrada pois está desativada.", ise.getMessage());
         }
     }
 
@@ -94,7 +94,7 @@ public class FacadeTest {
         try {
             this.facade.desativarAtividade(id);
         } catch (IllegalStateException ise) {
-            assertEquals("Não é possivel desativar a atividade " + id + ", já que está encerrada.", ise.getMessage());
+            assertEquals("A atividade " + id + " não pode ser desativada pois está encerrada.", ise.getMessage());
         }
     }
 
