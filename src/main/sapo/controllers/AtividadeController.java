@@ -7,9 +7,11 @@ import java.util.*;
 
 public class AtividadeController {
     private Map<Pessoa, Map<String, Atividade>> atividades;
+    private PessoaController pessoaController;
 
-    public AtividadeController (Map<Pessoa, Map<String, Atividade>> atividades) {
+    public AtividadeController (Map<Pessoa, Map<String, Atividade>> atividades, PessoaController pessoaController) {
         this.atividades = atividades;
+        this.pessoaController = pessoaController;
     }
     
     public String cadastrarAtividade(String nome, String descricao, String cpf) {
@@ -66,8 +68,7 @@ public class AtividadeController {
     public void alterarResponsavelAtividade(String id, String cpf) {
         this.validarParametro(cpf, "cpf");
         Atividade atividade = this.validarIdAtividade(id);
-        // TODO: get Pessoa by id
-        Pessoa novoResponsavel = new Pessoa();
+        Pessoa novoResponsavel = this.pessoaController.recuperarPessoa(cpf);
         atividade.setResponsavel(novoResponsavel);
     }
 

@@ -17,8 +17,8 @@ public class Facade {
     private PessoaController pessoaController;
 
     public Facade() {
-        this.atividadeController = new AtividadeController(new HashMap<>());
         this.pessoaController = new PessoaController(new HashMap<>());
+        this.atividadeController = new AtividadeController(new HashMap<>(), this.pessoaController);
         this.tarefaController = new TarefaController(new HashMap<>(), this.atividadeController, this.pessoaController);
 
     }
