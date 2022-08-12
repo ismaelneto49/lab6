@@ -55,6 +55,9 @@ public class Tarefa {
         }
 
         public void adicionarHoras(int horas) {
+            if (horas < 0) {
+                throw new IllegalArgumentException("Não é possível adicionar horas negativas em uma tarefa");
+            }
             if (this.isConcluida) {
                 throw new IllegalStateException("Não é possível adicionar horas em uma tarefa já concluída");
             }
@@ -62,6 +65,9 @@ public class Tarefa {
         }
 
         public void removerHoras(int horas) {
+            if (horas < 0) {
+                throw new IllegalArgumentException("Não é possível remover horas negativas em uma tarefa");
+            }
             if (this.isConcluida) {
                 throw new IllegalStateException("Não é possível remover horas em uma tarefa já concluída");
             }
