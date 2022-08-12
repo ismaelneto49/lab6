@@ -26,6 +26,7 @@ public class AtividadeController {
         if (pessoaNaoTemAtividade) {
             this.atividades.put(responsavel, new HashMap<>());
         }
+        novaAtividade.setId(atividadeId);
         this.atividades.get(responsavel).put(atividadeId, novaAtividade);
         return atividadeId;
     }

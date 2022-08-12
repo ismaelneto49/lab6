@@ -25,6 +25,9 @@ public class Atividade {
         return this.nome;
     }
 
+    public void setId(String id) {
+        this.id = id;
+    }
     public void setDescricao(String novaDescricao) {
         this.descricao = novaDescricao;
     }
