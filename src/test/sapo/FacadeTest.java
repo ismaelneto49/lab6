@@ -74,7 +74,12 @@ public class FacadeTest {
 
     @Test
     void testRemoverHorasTarefa() {
+        String id = this.facade.cadastrarTarefa(this.idAtividade, "tarefa", new String[]{"hab1", "hab3"});
+        this.facade.adicionarHorasTarefa(id, 50);
 
+        int horas = 10;
+        this.facade.removerHorasTarefa(id, horas);
+        assertTrue(this.facade.exibirTarefa(id).contains(50 - horas + " hora(s)"));
     }
 
     @Test
