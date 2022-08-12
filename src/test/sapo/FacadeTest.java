@@ -67,6 +67,7 @@ public class FacadeTest {
 
     @Test
     void testEncerrarAtividadeTarefasPendentes() {
+        String id = this.facade.cadastrarAtividade("atividade", "descricao", "000.000.000-00");
         //TODO
     }
 
