@@ -10,14 +10,14 @@ Cristovão Neto - 121110199
 
 ### Desenvolvimento
 
-Ismael Neto - 1
+Ismael Neto - 1, 4, 6
 
-Cristovão Neto - 2, 3
+Cristovão Neto - 2, 3, 5
 
 
 ### Testes
 
-Ismael Neto - 2, 3
+Ismael Neto - 2, 3, 5
 
-Cristovão Neto - 1
+Cristovão Neto - 1, 4, 6
 
