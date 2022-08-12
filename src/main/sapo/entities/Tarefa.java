@@ -77,6 +77,7 @@ public class Tarefa {
             builder.append(this.nome + " - " + this.id + "\n");
             builder.append("- " + this.atividade.getNome() + "\n");
             builder.append(String.join(", ", this.habilidades) + "\n");
+            builder.append("(" + this.duracao + " hora(s) executada(s))\n");
             builder.append("===" + "\n");
             builder.append("Equipe" + "\n");
             // TODO: toStringDTO() of Pessoa
