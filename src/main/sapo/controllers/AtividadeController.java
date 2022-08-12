@@ -19,7 +19,7 @@ public class AtividadeController {
         this.validarParametro(descricao, "descrição");
         this.validarParametro(cpf, "CPF");
         // TODO: get Pessoa by id
-        Pessoa responsavel = new Pessoa();
+        Pessoa responsavel = this.pessoaController.recuperarPessoa(cpf);
         String atividadeId = this.gerarIdAtividade(nome);
         Atividade novaAtividade = new Atividade("id", nome, descricao, responsavel);
         boolean pessoaNaoTemAtividade = Objects.isNull(this.atividades.get(responsavel));
