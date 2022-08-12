@@ -3,8 +3,7 @@ package sapo;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class FacadeTest {
 
@@ -42,6 +41,56 @@ public class FacadeTest {
         String[] novasHabs = new String[]{"hab2"};
         this.facade.alterarHabilidadesTarefa(id, novasHabs);
         assertTrue(this.facade.exibirTarefa(id).contains(novasHabs[0]));
+    }
+
+    @Test
+    void testAlterarHabilidadeVaziaTarefa() {
+        String id = this.facade.cadastrarTarefa(this.idAtividade, "tarefa", new String[]{"hab1", "hab3"});
+        String[] novasHabs = new String[]{};
+        this.facade.alterarHabilidadesTarefa(id, novasHabs);
+    }
+
+    @Test
+    void testAdicionarHorasTarefa() {
+        String id = this.facade.cadastrarTarefa(this.idAtividade, "tarefa", new String[]{"hab1", "hab3"});
+        int horas = 10;
+        this.facade.adicionarHorasTarefa(id, horas);
+        assertTrue(this.facade.exibirTarefa(id).contains(horas + " hora(s)"));
+    }
+
+    @Test
+    void testAdicionarHorasNegativasTarefa() {
+        String id = this.facade.cadastrarTarefa(this.idAtividade, "tarefa", new String[]{"hab1", "hab3"});
+        int horas = -10;
+        assertThrows(IllegalArgumentException.class, () -> {
+            this.facade.adicionarHorasTarefa(id, horas);
+        });
+        try {
+            this.facade.adicionarHorasTarefa(id, horas);
+        } catch (IllegalArgumentException iae) {
+            assertEquals("Não é possível adicionar horas negativas em uma tarefa", iae.getMessage());
+        }
+    }
+
+    @Test
+    void testRemoverHorasTarefa() {
+
+    }
+
+    @Test
+    void testRemoverHorasNegativasTarefa() {
+        String id = this.facade.cadastrarTarefa(this.idAtividade, "tarefa", new String[]{"hab1", "hab3"});
+        this.facade.adicionarHorasTarefa(id, 50);
+
+        int horas = -10;
+        assertThrows(IllegalArgumentException.class, () -> {
+            this.facade.removerHorasTarefa(id, horas);
+        });
+        try {
+            this.facade.removerHorasTarefa(id, horas);
+        } catch (IllegalArgumentException iae) {
+            assertEquals("Não é possível remover horas negativas em uma tarefa", iae.getMessage());
+        }
     }
 
     @Test
