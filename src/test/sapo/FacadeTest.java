@@ -338,6 +338,5 @@ public class FacadeTest {
 
     @Test
     void test() {
-
     }
 }
