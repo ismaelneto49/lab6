@@ -14,6 +14,7 @@ public class TarefaController {
     public TarefaController(Map<Atividade, Map<String, Tarefa>> tarefas, AtividadeController atividadeController, PessoaController pessoaController) {
         this.tarefas = tarefas;
         this.atividadeController = atividadeController;
+        this.pessoaController = pessoaController;
     }
 
     public String cadastrarTarefa(String atividadeId, String nome, String[] habilidades) {

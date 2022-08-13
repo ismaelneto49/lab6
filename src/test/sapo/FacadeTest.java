@@ -2,6 +2,7 @@ package sapo;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.NoSuchElementException;
@@ -14,8 +15,8 @@ public class FacadeTest {
     @BeforeEach
     void init() {
         this.facade = new Facade();
-        facade.cadastrarPessoa("000.000.000-00", "Irmael", new String[] {});
-        facade.cadastrarPessoa("111.111.111-11", "Cristovo", new String[] {});
+        facade.cadastrarPessoa("000.000.000-00", "Irmael", new String[]{});
+        facade.cadastrarPessoa("111.111.111-11", "Cristovo", new String[]{});
         this.idAtividade = this.facade.cadastrarAtividade("atividade", "uma atividade", "000.000.000-00");
     }
 
@@ -118,8 +119,7 @@ public class FacadeTest {
     @Test
     void testExibirAtividade() {
         String id = this.facade.cadastrarAtividade("atividadeDaora", "descricao", "000.000.000-00");
-        String expected = "TVD-1:atividadeDaora\n" + "Responsável: Irmael – 000.000.000-00\n" + "===\n" + "descricao\n"
-                + "===\n" + "Tarefas: 0/0\n";
+        String expected = "TVD-1:atividadeDaora\n" + "Responsável: Irmael – 000.000.000-00\n" + "===\n" + "descricao\n" + "===\n" + "Tarefas: 0/0\n";
         assertEquals(expected, this.facade.exibirAtividade(id));
     }
 
@@ -158,15 +158,15 @@ public class FacadeTest {
 
     @Test
     void testCadastrarTarefa() {
-        String id1 = this.facade.cadastrarTarefa(this.idAtividade, "tarefa", new String[] { "hab1", "hab3" });
-        String id2 = this.facade.cadastrarTarefa(this.idAtividade, "tarefa2", new String[] { "hab1" });
+        String id1 = this.facade.cadastrarTarefa(this.idAtividade, "tarefa", new String[]{"hab1", "hab3"});
+        String id2 = this.facade.cadastrarTarefa(this.idAtividade, "tarefa2", new String[]{"hab1"});
         assertEquals("TVD-0-0", id1);
         assertEquals("TVD-0-1", id2);
     }
 
     @Test
     void testAlterarNomeTarefa() {
-        String id = this.facade.cadastrarTarefa(this.idAtividade, "tarefa", new String[] { "hab1", "hab3" });
+        String id = this.facade.cadastrarTarefa(this.idAtividade, "tarefa", new String[]{"hab1", "hab3"});
         String novoNome = "tarefa daora";
         this.facade.alterarNomeTarefa(id, novoNome);
         assertTrue(this.facade.exibirTarefa(id).contains(novoNome));
@@ -174,22 +174,22 @@ public class FacadeTest {
 
     @Test
     void testAlterarHabilidadesTarefa() {
-        String id = this.facade.cadastrarTarefa(this.idAtividade, "tarefa", new String[] { "hab1", "hab3" });
-        String[] novasHabs = new String[] { "hab2" };
+        String id = this.facade.cadastrarTarefa(this.idAtividade, "tarefa", new String[]{"hab1", "hab3"});
+        String[] novasHabs = new String[]{"hab2"};
         this.facade.alterarHabilidadesTarefa(id, novasHabs);
         assertTrue(this.facade.exibirTarefa(id).contains(novasHabs[0]));
     }
 
     @Test
     void testAlterarHabilidadeVaziaTarefa() {
-        String id = this.facade.cadastrarTarefa(this.idAtividade, "tarefa", new String[] { "hab1", "hab3" });
-        String[] novasHabs = new String[] {};
+        String id = this.facade.cadastrarTarefa(this.idAtividade, "tarefa", new String[]{"hab1", "hab3"});
+        String[] novasHabs = new String[]{};
         this.facade.alterarHabilidadesTarefa(id, novasHabs);
     }
 
     @Test
     void testAdicionarHorasTarefa() {
-        String id = this.facade.cadastrarTarefa(this.idAtividade, "tarefa", new String[] { "hab1", "hab3" });
+        String id = this.facade.cadastrarTarefa(this.idAtividade, "tarefa", new String[]{"hab1", "hab3"});
         int horas = 10;
         this.facade.adicionarHorasTarefa(id, horas);
         assertTrue(this.facade.exibirTarefa(id).contains(horas + " hora(s)"));
@@ -197,7 +197,7 @@ public class FacadeTest {
 
     @Test
     void testAdicionarHorasNegativasTarefa() {
-        String id = this.facade.cadastrarTarefa(this.idAtividade, "tarefa", new String[] { "hab1", "hab3" });
+        String id = this.facade.cadastrarTarefa(this.idAtividade, "tarefa", new String[]{"hab1", "hab3"});
         int horas = -10;
         assertThrows(IllegalArgumentException.class, () -> {
             this.facade.adicionarHorasTarefa(id, horas);
@@ -211,7 +211,7 @@ public class FacadeTest {
 
     @Test
     void testAdicionarHorasTarefaConcluida() {
-        String id = this.facade.cadastrarTarefa(this.idAtividade, "tarefa", new String[] { "hab1", "hab3" });
+        String id = this.facade.cadastrarTarefa(this.idAtividade, "tarefa", new String[]{"hab1", "hab3"});
         this.facade.concluirTarefa(id);
 
         assertThrows(IllegalStateException.class, () -> {
@@ -226,7 +226,7 @@ public class FacadeTest {
 
     @Test
     void testRemoverHorasTarefa() {
-        String id = this.facade.cadastrarTarefa(this.idAtividade, "tarefa", new String[] { "hab1", "hab3" });
+        String id = this.facade.cadastrarTarefa(this.idAtividade, "tarefa", new String[]{"hab1", "hab3"});
         this.facade.adicionarHorasTarefa(id, 50);
 
         int horas = 10;
@@ -236,7 +236,7 @@ public class FacadeTest {
 
     @Test
     void testRemoverHorasNegativasTarefa() {
-        String id = this.facade.cadastrarTarefa(this.idAtividade, "tarefa", new String[] { "hab1", "hab3" });
+        String id = this.facade.cadastrarTarefa(this.idAtividade, "tarefa", new String[]{"hab1", "hab3"});
         this.facade.adicionarHorasTarefa(id, 50);
 
         int horas = -10;
@@ -252,7 +252,7 @@ public class FacadeTest {
 
     @Test
     void testRemoverHorasTarefaConcluida() {
-        String id = this.facade.cadastrarTarefa(this.idAtividade, "tarefa", new String[] { "hab1", "hab3" });
+        String id = this.facade.cadastrarTarefa(this.idAtividade, "tarefa", new String[]{"hab1", "hab3"});
         this.facade.concluirTarefa(id);
 
         assertThrows(IllegalStateException.class, () -> {
@@ -267,16 +267,75 @@ public class FacadeTest {
 
     @Test
     void testConcluirTarefa() {
-        String id = this.facade.cadastrarTarefa(this.idAtividade, "tarefa", new String[] { "hab1", "hab3" });
+        String id = this.facade.cadastrarTarefa(this.idAtividade, "tarefa", new String[]{"hab1", "hab3"});
         this.facade.concluirTarefa(id);
     }
 
     @Test
     void testRemoverTarefa() {
-        String id = this.facade.cadastrarTarefa(this.idAtividade, "tarefa", new String[] { "hab1", "hab3" });
+        String id = this.facade.cadastrarTarefa(this.idAtividade, "tarefa", new String[]{"hab1", "hab3"});
         this.facade.removerTarefa(id);
     }
-    
+
+    @Test
+    void testExibirTarefa() {
+        String id = this.facade.cadastrarTarefa(this.idAtividade, "tarefa", new String[]{"hab1", "hab3"});
+        String resultado = this.facade.exibirTarefa(id);
+        String esperado = "tarefa - TVD-0-0\n" + "- atividade\n" + "hab1, hab3\n" + "(0 hora(s) executada(s))\n" + "===\n" + "Equipe\n";
+        assertEquals(esperado, resultado);
+    }
+
+    @Test
+    void testExibirTarefaPessoaAssociada() {
+        String id = this.facade.cadastrarTarefa(this.idAtividade, "tarefa", new String[]{"hab1", "hab3"});
+        this.facade.associarPessoaTarefa("000.000.000-00", id);
+        String resultado = this.facade.exibirTarefa(id);
+        String esperado = "tarefa - TVD-0-0\n" + "- atividade\n" + "hab1, hab3\n" + "(0 hora(s) executada(s))\n" + "===\n" + "Equipe\n" + "Irmael – 000.000.000-00\n";
+        assertEquals(esperado, resultado);
+    }
+
+    @Test
+    void testAssociarPessoaTarefa() {
+        String id = this.facade.cadastrarTarefa(this.idAtividade, "tarefa", new String[]{"hab1", "hab3"});
+        this.facade.associarPessoaTarefa("000.000.000-00", id);
+    }
+
+    @Test
+    void testAssociarPessoaTarefaConcluida() {
+        String id = this.facade.cadastrarTarefa(this.idAtividade, "tarefa", new String[]{"hab1", "hab3"});
+        this.facade.concluirTarefa(id);
+        assertThrows(IllegalStateException.class, () -> {
+            this.facade.associarPessoaTarefa("111.111.111-11", id);
+        });
+        try {
+            this.facade.associarPessoaTarefa("111.111.111-11", id);
+        } catch (IllegalStateException ise) {
+            assertEquals("Não é possível adicionar pessoa responsável em uma tarefa já concluída", ise.getMessage());
+        }
+    }
+
+    @Test
+    void testRemoverPessoaTarefa() {
+        String id = this.facade.cadastrarTarefa(this.idAtividade, "tarefa", new String[]{"hab1", "hab3"});
+        this.facade.associarPessoaTarefa("000.000.000-00", id);
+        this.facade.removerPessoaTarefa("000.000.000-00", id);
+    }
+
+    @Test
+    void testRemoverPessoaTarefaConcluida() {
+        String id = this.facade.cadastrarTarefa(this.idAtividade, "tarefa", new String[]{"hab1", "hab3"});
+        this.facade.associarPessoaTarefa("111.111.111-11", id);
+        this.facade.concluirTarefa(id);
+        assertThrows(IllegalStateException.class, () -> {
+            this.facade.removerPessoaTarefa("111.111.111-11", id);
+        });
+        try {
+            this.facade.removerPessoaTarefa("111.111.111-11", id);
+        } catch (IllegalStateException ise) {
+            assertEquals("Não é possível remover pessoa responsável em uma tarefa já concluída", ise.getMessage());
+        }
+    }
+
     @Test
     void test() {
 
