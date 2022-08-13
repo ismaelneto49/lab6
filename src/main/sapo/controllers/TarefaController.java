@@ -54,6 +54,11 @@ public class TarefaController {
         tarefa.removerHoras(horas);
     }
 
+    public void concluirTarefa(String idTarefa) {
+        Tarefa tarefa = this.validarIdTarefa(idTarefa);
+        tarefa.concluirTarefa();
+    }
+
     public String exibirTarefa(String idTarefa) {
         Tarefa tarefa = this.validarIdTarefa(idTarefa);
         return tarefa.toString();
@@ -78,6 +83,7 @@ public class TarefaController {
         }
         return quantidadeTarefas;
     }
+
     private void validarParametro(String parametro, String nomeParametro) {
         if (Objects.isNull(parametro) || parametro.isBlank()) {
             throw new IllegalArgumentException("Campo " + nomeParametro + " não pode ser nulo ou vazio.");

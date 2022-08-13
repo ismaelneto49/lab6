@@ -211,7 +211,17 @@ public class FacadeTest {
 
     @Test
     void testAdicionarHorasTarefaConcluida() {
+        String id = this.facade.cadastrarTarefa(this.idAtividade, "tarefa", new String[] { "hab1", "hab3" });
+        this.facade.concluirTarefa(id);
 
+        assertThrows(IllegalStateException.class, () -> {
+            this.facade.adicionarHorasTarefa(id, 10);
+        });
+        try {
+            this.facade.adicionarHorasTarefa(id, 10);
+        } catch (IllegalStateException ise) {
+            assertEquals("Não é possível adicionar horas em uma tarefa já concluída", ise.getMessage());
+        }
     }
 
     @Test
@@ -243,14 +253,30 @@ public class FacadeTest {
     @Test
     void testRemoverHorasTarefaConcluida() {
         String id = this.facade.cadastrarTarefa(this.idAtividade, "tarefa", new String[] { "hab1", "hab3" });
-        //TODO
+        this.facade.concluirTarefa(id);
+
+        assertThrows(IllegalStateException.class, () -> {
+            this.facade.removerHorasTarefa(id, 10);
+        });
+        try {
+            this.facade.removerHorasTarefa(id, 10);
+        } catch (IllegalStateException ise) {
+            assertEquals("Não é possível remover horas em uma tarefa já concluída", ise.getMessage());
+        }
     }
 
     @Test
     void testConcluirTarefa() {
-
+        String id = this.facade.cadastrarTarefa(this.idAtividade, "tarefa", new String[] { "hab1", "hab3" });
+        this.facade.concluirTarefa(id);
     }
 
+    @Test
+    void testRemoverTarefa() {
+        String id = this.facade.cadastrarTarefa(this.idAtividade, "tarefa", new String[] { "hab1", "hab3" });
+        this.facade.removerTarefa(id);
+    }
+    
     @Test
     void test() {
 
