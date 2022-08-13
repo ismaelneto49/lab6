@@ -210,6 +210,11 @@ public class FacadeTest {
     }
 
     @Test
+    void testAdicionarHorasTarefaConcluida() {
+
+    }
+
+    @Test
     void testRemoverHorasTarefa() {
         String id = this.facade.cadastrarTarefa(this.idAtividade, "tarefa", new String[] { "hab1", "hab3" });
         this.facade.adicionarHorasTarefa(id, 50);
@@ -233,6 +238,17 @@ public class FacadeTest {
         } catch (IllegalArgumentException iae) {
             assertEquals("Não é possível remover horas negativas em uma tarefa", iae.getMessage());
         }
+    }
+
+    @Test
+    void testRemoverHorasTarefaConcluida() {
+        String id = this.facade.cadastrarTarefa(this.idAtividade, "tarefa", new String[] { "hab1", "hab3" });
+        //TODO
+    }
+
+    @Test
+    void testConcluirTarefa() {
+
     }
 
     @Test
