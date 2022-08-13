@@ -25,10 +25,8 @@ public class FacadeTest {
 
     @Test
     void testCadastrarAtividade() {
-        String id1 = this.facade.cadastrarAtividade("atividade", "descricao", "000.000.000-00");
-        String id2 = this.facade.cadastrarAtividade("legal", "descricao", "111.111.111-11");
-        assertEquals("TVD-0", id1);
-        assertEquals("LGL-1", id2);
+        String id1 = this.facade.cadastrarAtividade("legal", "descricao", "111.111.111-11");
+        assertEquals("LGL-1", id1);
     }
 
     @Test
@@ -119,8 +117,8 @@ public class FacadeTest {
 
     @Test
     void testExibirAtividade() {
-        String id = this.facade.cadastrarAtividade("atividade", "descricao", "000.000.000-00");
-        String expected = "TVD-0:atividade\n" + "Responsável: Irmael – 000.000.000-00\n" + "===\n" + "descricao\n"
+        String id = this.facade.cadastrarAtividade("atividadeDaora", "descricao", "000.000.000-00");
+        String expected = "TVD-1:atividadeDaora\n" + "Responsável: Irmael – 000.000.000-00\n" + "===\n" + "descricao\n"
                 + "===\n" + "Tarefas: 0/0\n";
         assertEquals(expected, this.facade.exibirAtividade(id));
     }
