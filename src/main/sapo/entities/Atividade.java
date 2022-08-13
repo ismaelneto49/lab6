@@ -72,7 +72,7 @@ public class Atividade {
 
     public String toString() {
         StringBuilder builder = new StringBuilder();
-        builder.append(this.id + ":" + this.nome + "\n");
+        builder.append(this.id + ": " + this.nome + "\n");
         if (Objects.nonNull(this.responsavel)) {
             builder.append("Responsável: " + this.responsavel.toStringReduzido() + "\n");
         }

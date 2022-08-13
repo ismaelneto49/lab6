@@ -31,7 +31,6 @@ public class TarefaController {
         this.tarefas.get(atividade).put(idNovaTarefa, novaTarefa);
 
         return idNovaTarefa;
-
     }
 
     public void alterarNomeTarefa(String idTarefa, String novoNome) {

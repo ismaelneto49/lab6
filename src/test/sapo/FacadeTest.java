@@ -171,8 +171,16 @@ public class FacadeTest {
 
     @Test
     void testEncerrarAtividadeTarefasPendentes() {
-        String id = this.facade.cadastrarAtividade("atividade", "descricao", "000.000.000-00");
-        // TODO
+        String idAtv = this.facade.cadastrarAtividade("atividade", "descricao", "000.000.000-00");
+        this.facade.cadastrarTarefa(idAtv, "tarefa", new String[] { "hab1", "hab3" });
+        assertThrows(IllegalStateException.class, () -> {
+            this.facade.encerrarAtividade(idAtv);
+        });
+        try {
+            this.facade.encerrarAtividade(idAtv);
+        } catch (IllegalStateException ise) {
+            assertEquals("A atividade " + idAtv + " possui tarefas pendentes.", ise.getMessage());
+        }
     }
 
     @Test
@@ -198,7 +206,15 @@ public class FacadeTest {
     @Test
     void testDesativarAtividadeTarefasPendentes() {
         String id = this.facade.cadastrarAtividade("atividade", "descricao", "000.000.000-00");
-        // TODO
+        this.facade.cadastrarTarefa(id, "tarefa", new String[] { "hab1", "hab3" });
+        assertThrows(IllegalStateException.class, () -> {
+            this.facade.desativarAtividade(id);
+        });
+        try {
+            this.facade.desativarAtividade(id);
+        } catch (IllegalStateException ise) {
+            assertEquals("A atividade " + id + " possui tarefas pendentes.", ise.getMessage());
+        }
     }
 
     @Test
@@ -224,15 +240,19 @@ public class FacadeTest {
     @Test
     void testExibirAtividade() {
         String id = this.facade.cadastrarAtividade("atividadeDaora", "descricao", "000.000.000-00");
-        String expected = "TVD-1:atividadeDaora\n" + "Responsável: Irmael – 000.000.000-00\n" + "===\n" + "descricao\n"
+        String esperado = "TVD-1: atividadeDaora\n" + "Responsável: Irmael – 000.000.000-00\n" + "===\n" + "descricao\n"
                 + "===\n" + "Tarefas: 0/0\n";
-        assertEquals(expected, this.facade.exibirAtividade(id));
+        assertEquals(esperado, this.facade.exibirAtividade(id));
     }
 
     @Test
     void testExibirAtividadeTarefas() {
-        String id = this.facade.cadastrarAtividade("atividade", "descricao", "000.000.000-00");
-        // TODO
+        String id = this.facade.cadastrarAtividade("atividadeDaora", "descricao", "000.000.000-00");
+        this.facade.cadastrarTarefa(id, "tarefa", new String[] { "hab1", "hab3" });
+
+        String esperado = "TVD-1: atividadeDaora\n" + "Responsável: Irmael – 000.000.000-00\n" + "===\n" + "descricao\n"
+                + "===\n" + "Tarefas: 0/1\n- tarefa - TVD-1-0" ;
+        assertEquals(esperado, this.facade.exibirAtividade(id));
     }
 
     @Test
