@@ -3,9 +3,9 @@ package sapo.entities;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 
 public class Atividade {
+
     private List<Tarefa> tarefas;
     private Pessoa responsavel;
     private String nome;
@@ -18,7 +18,7 @@ public class Atividade {
         this.nome = nome;
         this.descricao = descricao;
         this.responsavel = responsavel;
-        this.tarefas = new ArrayList<Tarefa>();
+        this.tarefas = new ArrayList<>();
     }
 
     public String getNome() {
@@ -72,7 +72,7 @@ public class Atividade {
 
     public String toString() {
         StringBuilder builder = new StringBuilder();
-        builder.append(this.id + ":" + this.nome + "\n");
+        builder.append(this.id + ": " + this.nome + "\n");
         if (Objects.nonNull(this.responsavel)) {
             builder.append("Responsável: " + this.responsavel.toStringReduzido() + "\n");
         }

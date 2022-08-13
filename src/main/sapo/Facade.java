@@ -8,6 +8,7 @@ import sapo.entities.Atividade;
 import sapo.entities.Pessoa;
 
 import java.util.HashMap;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 public class Facade {
@@ -104,6 +105,14 @@ public class Facade {
 
     public void removerHorasTarefa(String idTarefa, int horas) {
         this.tarefaController.removerHorasTarefa(idTarefa, horas);
+    }
+
+    public void concluirTarefa(String idTarefa) {
+        this.tarefaController.concluirTarefa(idTarefa);
+    }
+
+    public void removerTarefa(String idTarefa) {
+        throw new NoSuchElementException("Not yet implemented");
     }
 
     public String exibirTarefa(String idTarefa) {
