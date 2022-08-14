@@ -23,6 +23,7 @@ public class TarefaController {
         int numeroNovaTarefa = this.calcularQuantidadeTarefas();
         String idNovaTarefa = atividadeId + "-" + numeroNovaTarefa;
         Tarefa novaTarefa = new Tarefa(idNovaTarefa, nome, 0, atividade, habilidades);
+        atividade.cadastrarTarefa(novaTarefa);
         boolean atividadeNaoTemTarefa = Objects.isNull(this.tarefas.get(atividade));
 
         if (atividadeNaoTemTarefa) {
