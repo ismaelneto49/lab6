@@ -6,6 +6,7 @@ import java.util.NoSuchElementException;
 
 import sapo.entities.Comentario;
 import sapo.entities.Pessoa;
+import sapo.utils.Validacao;
 
 public class PessoaController {
 
@@ -16,8 +17,8 @@ public class PessoaController {
     }
 
     public void cadastrarPessoa(String cpf, String nome, String[] habilidades) {
-        this.validarCampoVazio(cpf, "cpf");
-        this.validarCampoVazio(nome, "nome");
+        Validacao.validarCampoVazio(cpf, "cpf");
+        Validacao.validarCampoVazio(nome, "nome");
 
         Pessoa p = new Pessoa(cpf, nome, habilidades);
         this.pessoas.put(cpf, p);
@@ -38,7 +39,7 @@ public class PessoaController {
 
     public void alterarNomePessoa(String cpf, String nome) {
         this.validarContemCpf(cpf);
-        this.validarCampoVazio(nome, "nome");
+        Validacao.validarCampoVazio(nome, "nome");
 
         Pessoa p = this.recuperarPessoa(cpf);
         p.setNome(nome);
@@ -59,7 +60,7 @@ public class PessoaController {
     public void adicionarComentario(String destinatarioCpf, String comentario, String autorCpf) {
         this.validarContemCpf(destinatarioCpf);
         this.validarContemCpf(autorCpf);
-        this.validarCampoVazio(comentario, "comentario");
+        Validacao.validarCampoVazio(comentario, "comentario");
 
         Pessoa autor = this.recuperarPessoa(autorCpf);
         Pessoa destinatario = this.recuperarPessoa(destinatarioCpf);
@@ -76,13 +77,6 @@ public class PessoaController {
     private void validarContemCpf(String cpf) {
         if (!this.pessoas.keySet().contains(cpf)) {
             throw new NoSuchElementException("CPF fornecido não pertence a nenhuma Pessoa");
-        }
-    }
-
-    private void validarCampoVazio(String field, String fieldName) {
-        if (field == null || field.isBlank()) {
-            String message = "Campo " + fieldName.trim() + " não pode ser vazio";
-            throw new IllegalArgumentException(message);
         }
     }
 }
