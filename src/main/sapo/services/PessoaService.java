@@ -4,6 +4,7 @@ import sapo.entities.Pessoa;
 import sapo.repositories.PessoaRepository;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
@@ -61,8 +62,8 @@ public class PessoaService {
     }
 
     public String[] buscar(String[] termos) {
-        String termo1 = termos[0];
-        String termo2 = termos[1];
+        String termo1 = termos[0].toLowerCase();
+        String termo2 = termos[1].toLowerCase();
         List<Pessoa> busca = this.pessoaRepository.buscar(termo1, termo2);
         String[] resultado = busca
                 .stream()
