@@ -1,11 +1,11 @@
 package sapo.services;
 
-import sapo.entities.Comentario;
 import sapo.entities.Pessoa;
 import sapo.repositories.PessoaRepository;
 
-import java.time.LocalDate;
+import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 public class PessoaService {
 
@@ -13,24 +13,6 @@ public class PessoaService {
 
     public PessoaService(PessoaRepository pessoaRepository) {
         this.pessoaRepository = pessoaRepository;
-    }
-
-    private void validarContemCpf(String cpf) {
-        if (!this.pessoaRepository.contains(cpf)) {
-            throw new NoSuchElementException("CPF fornecido não pertence a nenhuma Pessoa");
-        }
-    }
-
-    private void validarCampoVazio(String field, String fieldName) {
-        if (field == null || field.isBlank()) {
-            String message = "Campo " + fieldName.trim() + " não pode ser vazio";
-            throw new IllegalArgumentException(message);
-        }
-    }
-
-    public String[] buscar(String[] termos) {
-        Pessoa[] resultado = this.pessoaRepository.buscar(termos);
-        return null;
     }
 
     public void cadastrarPessoa(String cpf, String nome, String[] habilidades) {
@@ -42,7 +24,7 @@ public class PessoaService {
 
     public Pessoa recuperarPessoa(String cpf) {
         this.validarContemCpf(cpf);
-        return this.pessoaRepository.recuperarPessoa(cpf);
+        return this.pessoaRepository.getPessoaByCpf(cpf);
     }
 
     public String exibirPessoa(String cpf) {
@@ -76,5 +58,30 @@ public class PessoaService {
     public String listarComentarios(String cpf) {
         this.validarContemCpf(cpf);
         return this.pessoaRepository.listarComentarios(cpf);
+    }
+
+    public String[] buscar(String[] termos) {
+        String termo1 = termos[0];
+        String termo2 = termos[1];
+        List<Pessoa> busca = this.pessoaRepository.buscar(termo1, termo2);
+        String[] resultado = busca
+                .stream()
+                .map(pessoa -> pessoa.toString())
+                .collect(Collectors.toList())
+                .toArray(new String[]{});
+        return resultado;
+    }
+
+    private void validarContemCpf(String cpf) {
+        if (!this.pessoaRepository.contains(cpf)) {
+            throw new NoSuchElementException("CPF fornecido não pertence a nenhuma Pessoa");
+        }
+    }
+
+    private void validarCampoVazio(String field, String fieldName) {
+        if (field == null || field.isBlank()) {
+            String message = "Campo " + fieldName.trim() + " não pode ser vazio";
+            throw new IllegalArgumentException(message);
+        }
     }
 }

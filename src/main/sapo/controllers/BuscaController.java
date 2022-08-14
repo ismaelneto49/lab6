@@ -26,7 +26,7 @@ public class BuscaController {
         return null;
     }
 
-    public String[] exibirHistóricoBusca(int indexBusca) {
+    public String[] exibirHistoricoBusca(int indexBusca) {
         return null;
     }
 

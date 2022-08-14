@@ -2,9 +2,13 @@ package sapo.repositories;
 
 import sapo.entities.Comentario;
 import sapo.entities.Pessoa;
+import sapo.entities.TipoBusca;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class PessoaRepository {
 
@@ -18,28 +22,24 @@ public class PessoaRepository {
         return this.pessoas.keySet().contains(cpf);
     }
 
-    public Pessoa[] buscar(String[] termos) {
-        return null;
-    }
-
     public void cadastrarPessoa(String cpf, Pessoa p) {
         this.pessoas.put(cpf, p);
     }
 
-    public Pessoa recuperarPessoa(String cpf) {
+    public Pessoa getPessoaByCpf(String cpf) {
         return this.pessoas.get(cpf);
     }
 
     public String exibirPessoa(String cpf) {
-        return this.recuperarPessoa(cpf).toString();
+        return this.getPessoaByCpf(cpf).toString();
     }
 
     public void alterarNomePessoa(String cpf, String nome) {
-        this.recuperarPessoa(cpf).setNome(nome);
+        this.getPessoaByCpf(cpf).setNome(nome);
     }
 
     public void alterarHabilidadesPessoa(String cpf, String[] habilidades) {
-        this.recuperarPessoa(cpf).setHabilidades(habilidades);
+        this.getPessoaByCpf(cpf).setHabilidades(habilidades);
     }
 
     public void removerPessoa(String cpf) {
@@ -47,13 +47,99 @@ public class PessoaRepository {
     }
 
     public void adicionarComentario(String destinatarioCpf, String comentario, String autorCpf) {
-        Pessoa autor = this.recuperarPessoa(autorCpf);
-        Pessoa destinatario = this.recuperarPessoa(destinatarioCpf);
+        Pessoa autor = this.getPessoaByCpf(autorCpf);
+        Pessoa destinatario = this.getPessoaByCpf(destinatarioCpf);
         Comentario c = new Comentario(comentario, LocalDate.now(), autor, destinatario);
         destinatario.adicionarComentario(c);
     }
 
     public String listarComentarios(String cpf) {
-        return this.recuperarPessoa(cpf).listarComentarios();
+        return this.getPessoaByCpf(cpf).listarComentarios();
     }
+
+    public List<Pessoa> buscar(String termo1, String termo2) {
+        List<Pessoa> resultado = new ArrayList<>();
+
+        TipoBusca tipoTermo1 = this.classificaTipoTermo(termo1);
+        TipoBusca tipoTermo2 = this.classificaTipoTermo(termo2);
+
+        switch (tipoTermo1) {
+            case CPF:
+                resultado.add(this.getPessoaByCpf(termo1));
+                break;
+            case NOME:
+                resultado.addAll(this.filterPessoasByNome(termo1));
+                break;
+            case HABILIDADE:
+                resultado.addAll(this.filterPessoasByHabilidade(termo1));
+                break;
+        }
+
+        switch (tipoTermo2) {
+            case CPF:
+                if (!termo1.equals(termo2)) {
+                    resultado.clear();
+                }
+                break;
+            case NOME:
+                resultado = this.funnelByNome(resultado, termo2);
+                break;
+            case HABILIDADE:
+                resultado = this.funnelByHabilidade(resultado, termo2);
+                break;
+        }
+
+        return resultado;
+    }
+
+    private TipoBusca classificaTipoTermo(String termo) {
+        if (this.ehCpf(termo)) {
+            return TipoBusca.CPF;
+        }
+        if (this.ehNome(termo)) {
+            return TipoBusca.NOME;
+        }
+        return TipoBusca.HABILIDADE;
+    }
+
+    private List<Pessoa> filterPessoasByNome(String nome) {
+        List<Pessoa> resultado = this.pessoas.values()
+                .stream()
+                .filter(pessoa -> pessoa.getNome().contains(nome))
+                .collect(Collectors.toList());
+        return resultado;
+    }
+
+    private List<Pessoa> filterPessoasByHabilidade(String habilidade) {
+        List<Pessoa> resultado = this.pessoas.values()
+                .stream()
+                .filter(pessoa -> pessoa.hasHabilidade(habilidade))
+                .collect(Collectors.toList());
+        return resultado;
+    }
+
+    private List<Pessoa> funnelByNome(List<Pessoa> pessoas, String nome) {
+        List<Pessoa> resultado = pessoas
+                .stream()
+                .filter(pessoa -> pessoa.getNome().contains(nome))
+                .collect(Collectors.toList());
+        return resultado;
+    }
+
+    private List<Pessoa> funnelByHabilidade(List<Pessoa> pessoas, String habilidade) {
+        List<Pessoa> resultado = pessoas
+                .stream()
+                .filter(pessoa -> pessoa.hasHabilidade(habilidade))
+                .collect(Collectors.toList());
+        return resultado;
+    }
+
+    private boolean ehNome(String termo) {
+        return false;
+    }
+
+    private boolean ehCpf(String termo) {
+        return false;
+    }
+
 }

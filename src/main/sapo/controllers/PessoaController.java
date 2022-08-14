@@ -1,12 +1,9 @@
 package sapo.controllers;
 
-import java.time.LocalDate;
-import java.util.Map;
-import java.util.NoSuchElementException;
-
-import sapo.entities.Comentario;
 import sapo.entities.Pessoa;
 import sapo.services.PessoaService;
+
+import java.util.Map;
 
 public class PessoaController {
 

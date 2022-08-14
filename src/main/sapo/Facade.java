@@ -1,10 +1,9 @@
 package sapo;
 
 import sapo.controllers.AtividadeController;
-import sapo.controllers.TarefaController;
 import sapo.controllers.PessoaController;
+import sapo.controllers.TarefaController;
 import sapo.entities.Atividade;
-
 import sapo.entities.Pessoa;
 import sapo.repositories.PessoaRepository;
 import sapo.services.PessoaService;

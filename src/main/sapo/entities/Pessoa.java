@@ -1,6 +1,7 @@
 package sapo.entities;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Pessoa {
@@ -54,5 +55,9 @@ public class Pessoa {
             builder.append("\n-- " + c.toString());
         }
         return builder.toString();
+    }
+
+    public boolean hasHabilidade(String habilidade) {
+        return Arrays.asList(this.habilidades).contains(habilidade);
     }
 }
