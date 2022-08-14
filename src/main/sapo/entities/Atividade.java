@@ -81,8 +81,8 @@ public class Atividade {
         builder.append("===" + "\n");
         builder.append("Tarefas: " + this.getQuantidadeTarefasConcluidas() + "/" + this.getQuantidadeTarefasTotal() + "\n");
 
-        for (int i = this.tarefas.size() - 1; i > Math.max(this.tarefas.size() - 4, 0); i--) {
-            builder.append("- " + this.tarefas.get(i) + "\n");
+        for (int i = this.tarefas.size() - 1; i >= Math.max(this.tarefas.size() - 4, 0); i--) {
+            builder.append("- " + this.tarefas.get(i).toStringReduzido());
         }
 
         return builder.toString();
