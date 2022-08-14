@@ -12,11 +12,9 @@ import sapo.entities.Pessoa;
 public class PessoaController {
 
     private Map<String, Pessoa> pessoas;
-    private TarefaController tarefaController;
 
-    public PessoaController(Map<String, Pessoa> pessoas, TarefaController tarefaController) {
+    public PessoaController(Map<String, Pessoa> pessoas) {
         this.pessoas = pessoas;
-        this.tarefaController = tarefaController;
     }
 
     public void cadastrarPessoa(String cpf, String nome, String[] habilidades) {
