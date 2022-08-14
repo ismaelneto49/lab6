@@ -1,5 +1,6 @@
 package sapo.entities;
 
+import java.util.HashSet;
 import java.util.Set;
 
 public class Tarefa {
@@ -18,13 +19,27 @@ public class Tarefa {
             this.atividade = atividade;
             this.isConcluida = false;
             this.habilidades = habilidades;
+            pessoasResponsaveis = new HashSet<>();
         }
 
         public boolean getIsConcluida() {
             return this.isConcluida;
         }
+
+        public String getId() {
+            return this.id;
+        }
+
         public void setNome(String novoNome) {
             this.nome = novoNome;
+        }
+
+        public Set<Pessoa> getPessoasResponsaveis() {
+            return this.pessoasResponsaveis;
+        }
+
+        public String[] getHabilidades() {
+            return this.habilidades;
         }
 
         public void setHabilidades(String[] novasHabilidades) {

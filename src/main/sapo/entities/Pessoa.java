@@ -1,9 +1,6 @@
 package sapo.entities;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 public class Pessoa {
 
@@ -13,6 +10,8 @@ public class Pessoa {
     private int nivel;
     private Optional<Funcao> funcao;
     private List<Comentario> comentarios;
+    private Map<String, Tarefa> tarefas;
+    private Map<String, Tarefa> tarefasContabilizadas;
 
     public Pessoa(String cpf, String nome, String[] habilidades) {
         this.cpf = cpf;
@@ -21,7 +20,109 @@ public class Pessoa {
         this.funcao = Optional.empty();
         this.habilidades = habilidades;
         this.comentarios = new ArrayList<>();
+        this.tarefasContabilizadas = new HashMap<>();
+        this.tarefas = new HashMap<>();
     }
+
+
+    public void setFuncaoAluno(String matricula, int periodo) {
+        if (this.funcao.isPresent() && this.funcao.get() instanceof Aluno) {
+            throw new IllegalStateException("Essa pessoa já é um Aluno");
+        }
+        this.nivel = 0;
+        this.funcao = Optional.of(new Aluno(matricula, periodo));
+
+    }
+
+    public void setFuncaoProfessor(String siape, String[] disciplinas) {
+        if (this.funcao.isPresent() && this.funcao.get() instanceof Professor) {
+            throw new IllegalStateException("Essa pessoa já é um Professor");
+        }
+        this.nivel = 0;
+        this.funcao = Optional.of(new Professor(siape, disciplinas));
+    }
+
+    public void adicionarTarefa(Tarefa tarefa) {
+        this.tarefas.put(tarefa.getId(), tarefa);
+    }
+
+    public void removerTarefa(Tarefa tarefa) {
+        this.tarefas.remove(tarefa.getId());
+    }
+
+    public void removerFuncao() {
+        this.nivel = 0;
+        this.funcao = Optional.empty();
+    }
+
+    public String getNome() {
+        return this.nome;
+    }
+
+    public int getNivel() {
+        this.nivel += this.incrementarNivel();
+        return this.nivel;
+    }
+
+    public String[] getHabilidades() {
+        return this.habilidades;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public void setHabilidades(String[] habilidades) {
+        this.habilidades = habilidades;
+    }
+
+    public void adicionarComentario(Comentario comentario) {
+        this.comentarios.add(comentario);
+    }
+
+
+    public String listarComentarios() {
+        StringBuilder builder = new StringBuilder();
+        builder.append(this.nome + " – " + this.cpf);
+        builder.append("\nComentários:");
+        for (Comentario c : this.comentarios) {
+            builder.append("\n-- " + c.toString());
+        }
+        return builder.toString();
+    }
+
+    private int incrementarNivel() {
+        Map<String, Tarefa> tarefasASeremContabilizadas = new HashMap<>();
+
+        for (Tarefa tarefa : this.tarefas.values()) {
+            if (!this.tarefasContabilizadas.containsKey(tarefa.getId())) {
+                tarefasASeremContabilizadas.put(tarefa.getId(), tarefa);
+            }
+        }
+
+        this.tarefasContabilizadas.putAll(tarefasASeremContabilizadas);
+
+        if (this.funcao.isPresent()) {
+            return this.funcao.get().incrementarNivel(tarefasASeremContabilizadas, this);
+        }
+
+        return this.incrementarNivel(tarefasASeremContabilizadas);
+
+    }
+
+    private int incrementarNivel(Map<String, Tarefa> tarefas) {
+        double nivelTotal = 0;
+
+        for (Tarefa tarefa : tarefas.values()) {
+            if (tarefa.getIsConcluida()) {
+                nivelTotal += 1;
+            }
+            nivelTotal += 0.5;
+        }
+        return (int) nivelTotal;
+
+    }
+
 
     @Override
     public String toString() {
@@ -39,54 +140,16 @@ public class Pessoa {
         return this.nome + " – " + this.cpf;
     }
 
-    public void setFuncaoAluno(String matricula, int periodo) {
-        if (this.funcao.isPresent() && this.funcao.get() instanceof Aluno) {
-            throw new IllegalStateException("Essa pessoa já é um Aluno");
+    @Override
+    public boolean equals(Object object) {
+        if (object == this) {
+            return true;
         }
-        this.funcao = Optional.of(new Aluno(matricula, periodo));
-
-    }
-
-    public void setFuncaoProfessor(String siape, String[] disciplinas) {
-        if (this.funcao.isPresent() && this.funcao.get() instanceof Professor) {
-            throw new IllegalStateException("Essa pessoa já é um Professor");
+        if (!(object instanceof Pessoa)) {
+            return false;
         }
-        this.funcao = Optional.of(new Professor(siape, disciplinas));
-    }
+        Pessoa pessoa = (Pessoa) object;
 
-    public void removerFuncao() {
-        this.funcao = Optional.empty();
-    }
-
-
-
-    public String getNome() {
-        return this.nome;
-    }
-
-    public int getNivel() {
-        return this.nivel;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
-    public void setHabilidades(String[] habilidades) {
-        this.habilidades = habilidades;
-    }
-
-    public void adicionarComentario(Comentario comentario) {
-        this.comentarios.add(comentario);
-    }
-
-    public String listarComentarios() {
-        StringBuilder builder = new StringBuilder();
-        builder.append(this.nome + " – " + this.cpf);
-        builder.append("\nComentários:");
-        for (Comentario c : this.comentarios) {
-            builder.append("\n-- " + c.toString());
-        }
-        return builder.toString();
+        return this.cpf == pessoa.cpf;
     }
 }
