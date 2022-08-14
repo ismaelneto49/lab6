@@ -6,6 +6,8 @@ import sapo.controllers.PessoaController;
 import sapo.entities.Atividade;
 
 import sapo.entities.Pessoa;
+import sapo.repositories.PessoaRepository;
+import sapo.services.PessoaService;
 
 import java.util.HashMap;
 import java.util.NoSuchElementException;
@@ -17,8 +19,16 @@ public class Facade {
     private TarefaController tarefaController;
     private PessoaController pessoaController;
 
+    private PessoaService pessoaService;
+
+    private PessoaRepository pessoaRepository;
+
     public Facade() {
-        this.pessoaController = new PessoaController(new HashMap<>());
+        this.pessoaRepository = new PessoaRepository(new HashMap<>());
+
+        this.pessoaService = new PessoaService(this.pessoaRepository);
+
+        this.pessoaController = new PessoaController(new HashMap<>(), this.pessoaService);
         this.atividadeController = new AtividadeController(new HashMap<>(), this.pessoaController);
         this.tarefaController = new TarefaController(new HashMap<>(), this.atividadeController, this.pessoaController);
     }
