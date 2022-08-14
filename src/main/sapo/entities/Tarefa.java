@@ -101,7 +101,6 @@ public class Tarefa {
         builder.append("(" + this.duracao + " hora(s) executada(s))\n");
         builder.append("===" + "\n");
         builder.append("Equipe" + "\n");
-        // TODO: toStringDTO() of Pessoa
         for (Pessoa pessoa : this.pessoasResponsaveis) {
             builder.append(pessoa.toStringReduzido() + "\n");
         }

@@ -127,6 +127,13 @@ public class FacadeTest {
         assertEquals(resultadoEsperado, comentarios);
     }
 
+    @Test
+    void testGetNivel() {
+        this.facade.cadastrarPessoa("222.222.222-22", "Pedro", new String[]{"programar"});
+        String idAtividade = this.facade.cadastrarAtividade("lab6", "Laboratorio 6", "000.000.000-00");
+//        this.facade.cadastrarTarefa();
+    }
+
     // ########### Tests for Atividade (remove later) ###########//
 
     @Test
