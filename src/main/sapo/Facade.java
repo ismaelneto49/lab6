@@ -8,6 +8,7 @@ import sapo.entities.Atividade;
 import sapo.entities.Pessoa;
 
 import java.util.HashMap;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 public class Facade {
@@ -20,7 +21,6 @@ public class Facade {
         this.pessoaController = new PessoaController(new HashMap<>());
         this.atividadeController = new AtividadeController(new HashMap<>(), this.pessoaController);
         this.tarefaController = new TarefaController(new HashMap<>(), this.atividadeController, this.pessoaController);
-
     }
 
     public void cadastrarPessoa(String cpf, String nome, String[] habilidades) {
@@ -59,7 +59,7 @@ public class Facade {
         return this.atividadeController.cadastrarAtividade(nome, descricao, cpf);
     }
 
-    public Optional<Atividade> recuperarAtividade(String id){
+    public Optional<Atividade> recuperarAtividade(String id) {
         return this.atividadeController.recuperarAtividade(id);
     }
 
@@ -70,6 +70,7 @@ public class Facade {
     public void desativarAtividade(String id) {
         this.atividadeController.desativarAtividade(id);
     }
+
     public void reabrirAtividade(String id) {
         this.atividadeController.reabrirAtividade(id);
     }
@@ -106,9 +107,18 @@ public class Facade {
         this.tarefaController.removerHorasTarefa(idTarefa, horas);
     }
 
+    public void concluirTarefa(String idTarefa) {
+        this.tarefaController.concluirTarefa(idTarefa);
+    }
+
+    public void removerTarefa(String idTarefa) {
+        throw new NoSuchElementException("Not yet implemented");
+    }
+
     public String exibirTarefa(String idTarefa) {
         return this.tarefaController.exibirTarefa(idTarefa);
     }
+
     public void associarPessoaTarefa(String cpf, String idTarefa) {
         this.tarefaController.associarPessoaTarefa(cpf, idTarefa);
     }
@@ -117,5 +127,4 @@ public class Facade {
         this.tarefaController.removerPessoaTarefa(cpf, idTarefa);
     }
 
-
-    }
+}

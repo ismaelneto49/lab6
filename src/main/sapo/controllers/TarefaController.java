@@ -31,7 +31,6 @@ public class TarefaController {
         this.tarefas.get(atividade).put(idNovaTarefa, novaTarefa);
 
         return idNovaTarefa;
-
     }
 
     public void alterarNomeTarefa(String idTarefa, String novoNome) {
@@ -53,6 +52,11 @@ public class TarefaController {
     public void removerHorasTarefa(String idTarefa, int horas) {
         Tarefa tarefa = this.validarIdTarefa(idTarefa);
         tarefa.removerHoras(horas);
+    }
+
+    public void concluirTarefa(String idTarefa) {
+        Tarefa tarefa = this.validarIdTarefa(idTarefa);
+        tarefa.concluirTarefa();
     }
 
     public String exibirTarefa(String idTarefa) {
@@ -81,6 +85,7 @@ public class TarefaController {
         }
         return quantidadeTarefas;
     }
+
     private void validarParametro(String parametro, String nomeParametro) {
         if (Objects.isNull(parametro) || parametro.isBlank()) {
             throw new IllegalArgumentException("Campo " + nomeParametro + " não pode ser nulo ou vazio.");
