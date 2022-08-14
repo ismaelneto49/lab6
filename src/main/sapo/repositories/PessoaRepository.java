@@ -134,12 +134,15 @@ public class PessoaRepository {
         return resultado;
     }
 
-    private boolean ehNome(String termo) {
-        return false;
-    }
-
     private boolean ehCpf(String termo) {
-        return false;
+        return this.pessoas.keySet().contains(termo);
     }
 
+    private boolean ehNome(String termo) {
+        List<String> nomes = pessoas.values()
+                .stream()
+                .map(pessoa -> pessoa.getNome())
+                .collect(Collectors.toList());
+        return nomes.stream().anyMatch(nome -> nome.contains(termo));
+    }
 }
