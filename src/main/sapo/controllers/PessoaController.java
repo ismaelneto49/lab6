@@ -12,9 +12,11 @@ import sapo.entities.Pessoa;
 public class PessoaController {
 
     private Map<String, Pessoa> pessoas;
+    private TarefaController tarefaController;
 
-    public PessoaController(Map<String, Pessoa> pessoas) {
+    public PessoaController(Map<String, Pessoa> pessoas, TarefaController tarefaController) {
         this.pessoas = pessoas;
+        this.tarefaController = tarefaController;
     }
 
     public void cadastrarPessoa(String cpf, String nome, String[] habilidades) {
@@ -74,6 +76,7 @@ public class PessoaController {
         this.validarContemCpf(cpf);
         this.recuperarPessoa(cpf).setFuncaoAluno(matricula, periodo);
     }
+
     public void definirFuncaoProfessor(String cpf, String siape, String[] disciplinas) {
         this.validarContemCpf(cpf);
         this.recuperarPessoa(cpf).setFuncaoProfessor(siape, disciplinas);
@@ -86,7 +89,8 @@ public class PessoaController {
 
     public int pegarNivel(String cpf) {
         this.validarContemCpf(cpf);
-        return this.recuperarPessoa(cpf).getNivel();
+        Pessoa pessoa = this.recuperarPessoa(cpf);
+        return pessoa.getNivel();
     }
 
     public String[] listarPessoas() {

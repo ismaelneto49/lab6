@@ -14,6 +14,7 @@ public class TarefaController {
     public TarefaController(Map<Atividade, Map<String, Tarefa>> tarefas, AtividadeController atividadeController, PessoaController pessoaController) {
         this.tarefas = tarefas;
         this.atividadeController = atividadeController;
+        this.pessoaController = pessoaController;
     }
 
     public String cadastrarTarefa(String atividadeId, String nome, String[] habilidades) {
@@ -63,12 +64,14 @@ public class TarefaController {
         Pessoa pessoa = pessoaController.recuperarPessoa(cpf);
         Tarefa tarefa = this.validarIdTarefa(idTarefa);
         tarefa.adicionarPessoaResponsavel(pessoa);
+        pessoa.adicionarTarefa(tarefa);
     }
 
     public void removerPessoaTarefa(String cpf, String idTarefa) {
         Pessoa pessoa = pessoaController.recuperarPessoa(cpf);
         Tarefa tarefa = this.validarIdTarefa(idTarefa);
         tarefa.removerPessoaResponsavel(pessoa);
+        pessoa.removerTarefa(tarefa);
     }
 
     private int calcularQuantidadeTarefas() {
@@ -100,5 +103,7 @@ public class TarefaController {
         }
         return Optional.empty();
     }
+
+
 
 }
