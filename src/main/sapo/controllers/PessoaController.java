@@ -32,6 +32,7 @@ public class PessoaController {
 
         Pessoa p = new Pessoa(cpf, nome, habilidades);
         p.setFuncaoAluno(matricula, periodo);
+        this.pessoas.put(cpf, p);
 
     }
 
@@ -42,6 +43,7 @@ public class PessoaController {
 
         Pessoa p = new Pessoa(cpf, nome, habilidades);
         p.setFuncaoProfessor(siape, disciplinas);
+        this.pessoas.put(cpf, p);
     }
 
     public Pessoa recuperarPessoa(String cpf) {
