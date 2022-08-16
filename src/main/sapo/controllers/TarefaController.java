@@ -38,6 +38,7 @@ public class TarefaController {
         Tarefa tarefa = this.validarIdTarefa(idTarefa);
         this.validarParametro(novoNome, "novo nome");
         tarefa.setNome(novoNome);
+
     }
 
     public void alterarHabilidadesTarefa(String idTarefa, String[] habilidades) {

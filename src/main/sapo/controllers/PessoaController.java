@@ -8,6 +8,7 @@ import java.util.NoSuchElementException;
 
 import sapo.entities.Comentario;
 import sapo.entities.Pessoa;
+import sapo.entities.Tarefa;
 
 public class PessoaController {
 
@@ -95,8 +96,13 @@ public class PessoaController {
 
     public String[] listarPessoas() {
         List<Pessoa> pessoas = new ArrayList<>(this.pessoas.values());
-        return new String[1];
+        String[] pessoasString = new String[pessoas.size()];
 
+        for (int i = 0; i < pessoasString.length; i ++) {
+            pessoasString[i] = pessoas.get(i).toString();
+        }
+
+        return pessoasString;
     }
 
     public void removerPessoa(String cpf) {

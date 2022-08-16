@@ -29,7 +29,8 @@ public class Pessoa {
         if (this.funcao.isPresent() && this.funcao.get() instanceof Aluno) {
             throw new IllegalStateException("Essa pessoa já é um Aluno");
         }
-        this.nivel = 0;
+        this.nivel += this.calcularNivel();
+        this.contabilizarTarefas();
         this.funcao = Optional.of(new Aluno(matricula, periodo));
 
     }
@@ -38,8 +39,18 @@ public class Pessoa {
         if (this.funcao.isPresent() && this.funcao.get() instanceof Professor) {
             throw new IllegalStateException("Essa pessoa já é um Professor");
         }
-        this.nivel = 0;
+        this.nivel += this.calcularNivel();
+        this.contabilizarTarefas();
         this.funcao = Optional.of(new Professor(siape, disciplinas));
+    }
+
+    public void removerFuncao() {
+        if (this.funcao.isEmpty()) {
+            throw new IllegalStateException("Essa pessoa já está sem função");
+        }
+        this.nivel += this.calcularNivel();
+        this.contabilizarTarefas();
+        this.funcao = Optional.empty();
     }
 
     public void adicionarTarefa(Tarefa tarefa) {
@@ -50,18 +61,13 @@ public class Pessoa {
         this.tarefas.remove(tarefa.getId());
     }
 
-    public void removerFuncao() {
-        this.nivel = 0;
-        this.funcao = Optional.empty();
-    }
 
     public String getNome() {
         return this.nome;
     }
 
     public int getNivel() {
-        this.nivel += this.incrementarNivel();
-        return this.nivel;
+        return this.nivel + this.calcularNivel();
     }
 
     public String[] getHabilidades() {
@@ -91,7 +97,25 @@ public class Pessoa {
         return builder.toString();
     }
 
-    private int incrementarNivel() {
+    private int calcularNivel() {
+        Map<String, Tarefa> tarefasASeremContabilizadas = this.calcularTarefasASeremContabilizadas();
+
+
+        if (this.funcao.isPresent()) {
+            return this.funcao.get().incrementarNivel(tarefasASeremContabilizadas, this);
+        }
+
+        return this.incrementarNivel(tarefasASeremContabilizadas);
+
+    }
+
+    private void contabilizarTarefas() {
+        Map<String, Tarefa> tarefasASeremContabilizadas = this.calcularTarefasASeremContabilizadas();
+        this.tarefasContabilizadas.putAll(tarefasASeremContabilizadas);
+
+    }
+
+    private Map<String, Tarefa> calcularTarefasASeremContabilizadas() {
         Map<String, Tarefa> tarefasASeremContabilizadas = new HashMap<>();
 
         for (Tarefa tarefa : this.tarefas.values()) {
@@ -100,14 +124,7 @@ public class Pessoa {
             }
         }
 
-        this.tarefasContabilizadas.putAll(tarefasASeremContabilizadas);
-
-        if (this.funcao.isPresent()) {
-            return this.funcao.get().incrementarNivel(tarefasASeremContabilizadas, this);
-        }
-
-        return this.incrementarNivel(tarefasASeremContabilizadas);
-
+        return tarefasASeremContabilizadas;
     }
 
     private int incrementarNivel(Map<String, Tarefa> tarefas) {
