@@ -45,17 +45,20 @@ public class Aluno implements Funcao {
     }
 
     private int calcularNivelConcluida(Map<String, Tarefa> tarefasConcluidas, Pessoa pessoa) {
-        int contHabilidadeEmComum = 0;
+        int contTarefasComHabilidadeEmComum = 0;
+        int contTarefasSemHabilidadeEmComum = 0;
 
         for (Tarefa tarefaConcluida : tarefasConcluidas.values()) {
             String[] habilidadesTarefa = tarefaConcluida.getHabilidades();
             String[] habilidadesPessoa = pessoa.getHabilidades();
             if (this.contemHabilidadeEmComum(habilidadesTarefa, habilidadesPessoa)) {
-                contHabilidadeEmComum += 1;
+                contTarefasComHabilidadeEmComum += 1;
+            } else {
+                contTarefasSemHabilidadeEmComum += 1;
             }
         }
 
-        return (int) Math.ceil(1.5 * contHabilidadeEmComum) + tarefasConcluidas.size();
+        return (int) Math.ceil(1.5 * contTarefasComHabilidadeEmComum) + contTarefasSemHabilidadeEmComum;
 
     }
 
