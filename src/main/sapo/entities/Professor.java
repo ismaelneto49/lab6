@@ -63,7 +63,9 @@ public class Professor implements Funcao {
     private boolean contemHabilidadesEmComum(String[] habilidadesTarefa, String[] habilidadesPessoa) {
 
         for (int i = 0; i < habilidadesTarefa.length; i++) {
-            if (!Arrays.asList(habilidadesPessoa).contains(habilidadesTarefa[i]) || !Arrays.asList(this.disciplinas).contains(habilidadesTarefa[i])) {
+            boolean habilidadesPessoaContemHabilidadeTarefa = Arrays.asList(habilidadesPessoa).contains(habilidadesTarefa[i]);
+            boolean disciplinasPessoaContemHabilidadeTarefa = Arrays.asList(this.disciplinas).contains(habilidadesTarefa[i]);
+            if (!habilidadesPessoaContemHabilidadeTarefa && !disciplinasPessoaContemHabilidadeTarefa) {
                 return false;
             }
         }
