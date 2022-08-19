@@ -20,8 +20,6 @@ public class PessoaControllerTest {
 
     }
 
-    // ########### Tests for Pessoa (remove later) ###########//
-
     @Test
     void testCadastrarPessoa() {
         this.facade.cadastrarPessoa("123.123.123-12", "Teobaldo", new String[]{"hab1"});
