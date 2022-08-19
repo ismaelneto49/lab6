@@ -7,6 +7,7 @@ import java.util.Objects;
 public class Atividade {
 
     private List<Tarefa> tarefas;
+    private List<TarefaGerencial> tarefasGerenciais;
     private Pessoa responsavel;
     private String nome;
     private String descricao;
@@ -106,5 +107,11 @@ public class Atividade {
         return this.tarefas.size();
     }
 
+    public void cadastrarTarefaGerencial(TarefaGerencial tarefa) {
+        if (this.status == AtividadeStatus.ENCERRADA || this.status == AtividadeStatus.DESATIVADA) {
+            throw new IllegalStateException("A atividade não pode receber novas tarefas pois seu status atual é " + this.status);
+        }
+        this.tarefasGerenciais.add(tarefa);
+    }
 }
 
