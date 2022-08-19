@@ -1,9 +1,15 @@
 package sapo.controllers;
 
+import sapo.services.PessoaService;
+
 public class BuscaController {
 
+    private PessoaService pessoaService;
+//    private AtividadeService atividadeService;
+//    private TarefaService tarefaService;
+
     public String[] exibirPessoas(String consulta) {
-        return null;
+        return this.pessoaService.buscar(consulta.split(" "));
     }
 
     public String[] buscarAtividade(String consulta) {

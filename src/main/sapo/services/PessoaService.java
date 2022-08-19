@@ -80,19 +80,6 @@ public class PessoaService {
         this.pessoaRepository.cadastrarAluno(cpf, nome, matricula, periodo, habilidades);
     }
 
-    private void validarContemCpf(String cpf) {
-        if (!this.pessoaRepository.contains(cpf)) {
-            throw new NoSuchElementException("CPF fornecido não pertence a nenhuma Pessoa");
-        }
-    }
-
-    private void validarCampoVazio(String field, String fieldName) {
-        if (field == null || field.isBlank()) {
-            String message = "Campo " + fieldName.trim() + " não pode ser vazio";
-            throw new IllegalArgumentException(message);
-        }
-    }
-
     public void cadastrarProfessor(String cpf, String nome, String siape, String[] disciplinas, String[] habilidades) {
         this.validarCampoVazio(cpf, "cpf");
         this.validarCampoVazio(nome, "nome");
@@ -123,5 +110,18 @@ public class PessoaService {
 
     public String[] listarPessoas() {
         return this.pessoaRepository.listarPessoas();
+    }
+
+    private void validarContemCpf(String cpf) {
+        if (!this.pessoaRepository.contains(cpf)) {
+            throw new NoSuchElementException("CPF fornecido não pertence a nenhuma Pessoa");
+        }
+    }
+
+    private void validarCampoVazio(String field, String fieldName) {
+        if (field == null || field.isBlank()) {
+            String message = "Campo " + fieldName.trim() + " não pode ser vazio";
+            throw new IllegalArgumentException(message);
+        }
     }
 }

@@ -57,6 +57,43 @@ public class PessoaRepository {
         return this.getPessoaByCpf(cpf).listarComentarios();
     }
 
+    public void cadastrarAluno(String cpf, String nome, String matricula, int periodo, String[] habilidades) {
+        Pessoa p = new Pessoa(cpf, nome, habilidades);
+        p.setFuncaoAluno(matricula, periodo);
+        this.pessoas.put(cpf, p);
+    }
+
+    public void cadastrarProfessor(String cpf, String nome, String siape, String[] disciplinas, String[] habilidades) {
+        Pessoa p = new Pessoa(cpf, nome, habilidades);
+        p.setFuncaoProfessor(siape, disciplinas);
+        this.pessoas.put(cpf, p);
+    }
+
+    public void definirFuncaoAluno(String cpf, String matricula, int periodo) {
+        this.getPessoaByCpf(cpf).setFuncaoAluno(matricula, periodo);
+    }
+
+    public void definirFuncaoProfessor(String cpf, String siape, String[] disciplinas) {
+        this.getPessoaByCpf(cpf).setFuncaoProfessor(siape, disciplinas);
+    }
+
+    public void removerFuncao(String cpf) {
+        this.getPessoaByCpf(cpf).removerFuncao();
+    }
+
+    public int getNivel(String cpf) {
+        return this.getPessoaByCpf(cpf).getNivel();
+    }
+
+    public String[] listarPessoas() {
+        List<Pessoa> pessoas = new ArrayList<>(this.pessoas.values());
+        String[] pessoasString = new String[pessoas.size()];
+        for (int i = 0; i < pessoasString.length; i++) {
+            pessoasString[i] = pessoas.get(i).toString();
+        }
+        return pessoasString;
+    }
+
     public List<Pessoa> buscar(String termo1, String termo2) {
         List<Pessoa> resultado = new ArrayList<>();
 
@@ -129,42 +166,5 @@ public class PessoaRepository {
     private boolean ehNome(String termo) {
         List<String> nomes = pessoas.values().stream().map(pessoa -> pessoa.getNome()).collect(Collectors.toList());
         return nomes.stream().anyMatch(nome -> nome.contains(termo));
-    }
-
-    public void cadastrarAluno(String cpf, String nome, String matricula, int periodo, String[] habilidades) {
-        Pessoa p = new Pessoa(cpf, nome, habilidades);
-        p.setFuncaoAluno(matricula, periodo);
-        this.pessoas.put(cpf, p);
-    }
-
-    public void cadastrarProfessor(String cpf, String nome, String siape, String[] disciplinas, String[] habilidades) {
-        Pessoa p = new Pessoa(cpf, nome, habilidades);
-        p.setFuncaoProfessor(siape, disciplinas);
-        this.pessoas.put(cpf, p);
-    }
-
-    public void definirFuncaoAluno(String cpf, String matricula, int periodo) {
-        this.getPessoaByCpf(cpf).setFuncaoAluno(matricula, periodo);
-    }
-
-    public void definirFuncaoProfessor(String cpf, String siape, String[] disciplinas) {
-        this.getPessoaByCpf(cpf).setFuncaoProfessor(siape, disciplinas);
-    }
-
-    public void removerFuncao(String cpf) {
-        this.getPessoaByCpf(cpf).removerFuncao();
-    }
-
-    public int getNivel(String cpf) {
-        return this.getPessoaByCpf(cpf).getNivel();
-    }
-
-    public String[] listarPessoas() {
-        List<Pessoa> pessoas = new ArrayList<>(this.pessoas.values());
-        String[] pessoasString = new String[pessoas.size()];
-        for (int i = 0; i < pessoasString.length; i++) {
-            pessoasString[i] = pessoas.get(i).toString();
-        }
-        return pessoasString;
     }
 }
