@@ -20,16 +20,29 @@ public class Tarefa {
         this.atividade = atividade;
         this.isConcluida = false;
         this.habilidades = habilidades;
-        this.pessoasResponsaveis = new HashSet<>();
+        pessoasResponsaveis = new HashSet<>();
     }
 
     public boolean getIsConcluida() {
         return this.isConcluida;
     }
 
+    public String getId() {
+        return this.id;
+    }
+
     public void setNome(String novoNome) {
         this.nome = novoNome;
     }
+
+    public Set<Pessoa> getPessoasResponsaveis() {
+        return this.pessoasResponsaveis;
+    }
+
+    public String[] getHabilidades() {
+        return this.habilidades;
+    }
+
 
     public void setHabilidades(String[] novasHabilidades) {
         this.habilidades = novasHabilidades;
@@ -88,7 +101,6 @@ public class Tarefa {
         builder.append("(" + this.duracao + " hora(s) executada(s))\n");
         builder.append("===" + "\n");
         builder.append("Equipe" + "\n");
-        // TODO: toStringDTO() of Pessoa
         for (Pessoa pessoa : this.pessoasResponsaveis) {
             builder.append(pessoa.toStringReduzido() + "\n");
         }

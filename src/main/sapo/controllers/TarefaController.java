@@ -38,6 +38,7 @@ public class TarefaController {
         Tarefa tarefa = this.validarIdTarefa(idTarefa);
         this.validarParametro(novoNome, "novo nome");
         tarefa.setNome(novoNome);
+
     }
 
     public void alterarHabilidadesTarefa(String idTarefa, String[] habilidades) {
@@ -69,12 +70,14 @@ public class TarefaController {
         Pessoa pessoa = pessoaController.recuperarPessoa(cpf);
         Tarefa tarefa = this.validarIdTarefa(idTarefa);
         tarefa.adicionarPessoaResponsavel(pessoa);
+        pessoa.adicionarTarefa(tarefa);
     }
 
     public void removerPessoaTarefa(String cpf, String idTarefa) {
         Pessoa pessoa = pessoaController.recuperarPessoa(cpf);
         Tarefa tarefa = this.validarIdTarefa(idTarefa);
         tarefa.removerPessoaResponsavel(pessoa);
+        pessoa.removerTarefa(tarefa);
     }
 
     private int calcularQuantidadeTarefas() {
@@ -107,5 +110,7 @@ public class TarefaController {
         }
         return Optional.empty();
     }
+
+
 
 }

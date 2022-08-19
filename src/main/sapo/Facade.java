@@ -43,6 +43,34 @@ public class Facade {
         this.pessoaController.alterarHabilidadesPessoa(cpf, habilidades);
     }
 
+    public void cadastrarAluno(String cpf, String nome, String matricula, int periodo, String[] habilidades) {
+        this.pessoaController.cadastrarAluno(cpf, nome, matricula, periodo, habilidades);
+    }
+
+    public void cadastrarProfessor(String cpf, String nome, String siape, String[] disciplinas, String[] habilidades) {
+        this.pessoaController.cadastrarProfessor(cpf, nome, siape, disciplinas, habilidades);
+    }
+
+    public void definirFuncaoProfessor(String cpf, String siape, String[] disciplinas) {
+        this.pessoaController.definirFuncaoProfessor(cpf, siape, disciplinas);
+    }
+
+    public void definirFuncaoAluno(String cpf, String matricula, int periodo) {
+        this.pessoaController.definirFuncaoAluno(cpf, matricula, periodo);
+    }
+
+    public void removerFuncao(String cpf) {
+        this.pessoaController.removerFuncao(cpf);
+    }
+
+    public int pegarNivel(String cpf) {
+        return this.pessoaController.pegarNivel(cpf);
+    }
+
+    public String[] listarPessoas() {
+        return this.pessoaController.listarPessoas();
+    }
+
     public void removerPessoa(String cpf) {
         this.pessoaController.removerPessoa(cpf);
     }
