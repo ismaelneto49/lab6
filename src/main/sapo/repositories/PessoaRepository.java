@@ -22,7 +22,7 @@ public class PessoaRepository {
         return this.pessoas.keySet().contains(cpf);
     }
 
-    public void cadastrarPessoa(String cpf, Pessoa p) {
+    public void save(String cpf, Pessoa p) {
         this.pessoas.put(cpf, p);
     }
 
@@ -103,34 +103,22 @@ public class PessoaRepository {
     }
 
     private List<Pessoa> filterPessoasByNome(String nome) {
-        List<Pessoa> resultado = this.pessoas.values()
-                .stream()
-                .filter(pessoa -> pessoa.getNome().contains(nome))
-                .collect(Collectors.toList());
+        List<Pessoa> resultado = this.pessoas.values().stream().filter(pessoa -> pessoa.getNome().contains(nome)).collect(Collectors.toList());
         return resultado;
     }
 
     private List<Pessoa> filterPessoasByHabilidade(String habilidade) {
-        List<Pessoa> resultado = this.pessoas.values()
-                .stream()
-                .filter(pessoa -> pessoa.hasHabilidade(habilidade))
-                .collect(Collectors.toList());
+        List<Pessoa> resultado = this.pessoas.values().stream().filter(pessoa -> pessoa.hasHabilidade(habilidade)).collect(Collectors.toList());
         return resultado;
     }
 
     private List<Pessoa> funnelByNome(List<Pessoa> pessoas, String nome) {
-        List<Pessoa> resultado = pessoas
-                .stream()
-                .filter(pessoa -> pessoa.getNome().contains(nome))
-                .collect(Collectors.toList());
+        List<Pessoa> resultado = pessoas.stream().filter(pessoa -> pessoa.getNome().contains(nome)).collect(Collectors.toList());
         return resultado;
     }
 
     private List<Pessoa> funnelByHabilidade(List<Pessoa> pessoas, String habilidade) {
-        List<Pessoa> resultado = pessoas
-                .stream()
-                .filter(pessoa -> pessoa.hasHabilidade(habilidade))
-                .collect(Collectors.toList());
+        List<Pessoa> resultado = pessoas.stream().filter(pessoa -> pessoa.hasHabilidade(habilidade)).collect(Collectors.toList());
         return resultado;
     }
 
@@ -139,10 +127,44 @@ public class PessoaRepository {
     }
 
     private boolean ehNome(String termo) {
-        List<String> nomes = pessoas.values()
-                .stream()
-                .map(pessoa -> pessoa.getNome())
-                .collect(Collectors.toList());
+        List<String> nomes = pessoas.values().stream().map(pessoa -> pessoa.getNome()).collect(Collectors.toList());
         return nomes.stream().anyMatch(nome -> nome.contains(termo));
+    }
+
+    public void cadastrarAluno(String cpf, String nome, String matricula, int periodo, String[] habilidades) {
+        Pessoa p = new Pessoa(cpf, nome, habilidades);
+        p.setFuncaoAluno(matricula, periodo);
+        this.pessoas.put(cpf, p);
+    }
+
+    public void cadastrarProfessor(String cpf, String nome, String siape, String[] disciplinas, String[] habilidades) {
+        Pessoa p = new Pessoa(cpf, nome, habilidades);
+        p.setFuncaoProfessor(siape, disciplinas);
+        this.pessoas.put(cpf, p);
+    }
+
+    public void definirFuncaoAluno(String cpf, String matricula, int periodo) {
+        this.getPessoaByCpf(cpf).setFuncaoAluno(matricula, periodo);
+    }
+
+    public void definirFuncaoProfessor(String cpf, String siape, String[] disciplinas) {
+        this.getPessoaByCpf(cpf).setFuncaoProfessor(siape, disciplinas);
+    }
+
+    public void removerFuncao(String cpf) {
+        this.getPessoaByCpf(cpf).removerFuncao();
+    }
+
+    public int getNivel(String cpf) {
+        return this.getPessoaByCpf(cpf).getNivel();
+    }
+
+    public String[] listarPessoas() {
+        List<Pessoa> pessoas = new ArrayList<>(this.pessoas.values());
+        String[] pessoasString = new String[pessoas.size()];
+        for (int i = 0; i < pessoasString.length; i++) {
+            pessoasString[i] = pessoas.get(i).toString();
+        }
+        return pessoasString;
     }
 }

@@ -58,7 +58,7 @@ public class PessoaControllerTest {
     @Test
     void testRecuperarPessoaCpfExistente() {
         Pessoa pessoa = this.facade.recuperarPessoa("000.000.000-00");
-        assertEquals("Irmael – 000.000.000-00", pessoa.toString());
+        assertEquals("Irmael – 000.000.000-00\n", pessoa.toString());
     }
 
     @Test
@@ -77,7 +77,7 @@ public class PessoaControllerTest {
     @Test
     void testExibirPessoa() {
         String pessoaRepresentacao = this.facade.exibirPessoa("000.000.000-00");
-        assertEquals("Irmael – 000.000.000-00", pessoaRepresentacao);
+        assertEquals("Irmael – 000.000.000-00\n", pessoaRepresentacao);
     }
 
     @Test

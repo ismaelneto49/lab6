@@ -20,7 +20,7 @@ public class PessoaService {
         this.validarCampoVazio(cpf, "cpf");
         this.validarCampoVazio(nome, "nome");
         Pessoa p = new Pessoa(cpf, nome, habilidades);
-        this.pessoaRepository.cadastrarPessoa(cpf, p);
+        this.pessoaRepository.save(cpf, p);
     }
 
     public Pessoa recuperarPessoa(String cpf) {
@@ -73,6 +73,13 @@ public class PessoaService {
         return resultado;
     }
 
+    public void cadastrarAluno(String cpf, String nome, String matricula, int periodo, String[] habilidades) {
+        this.validarCampoVazio(cpf, "cpf");
+        this.validarCampoVazio(nome, "nome");
+        this.validarCampoVazio(matricula, "matricula");
+        this.pessoaRepository.cadastrarAluno(cpf, nome, matricula, periodo, habilidades);
+    }
+
     private void validarContemCpf(String cpf) {
         if (!this.pessoaRepository.contains(cpf)) {
             throw new NoSuchElementException("CPF fornecido não pertence a nenhuma Pessoa");
@@ -84,5 +91,37 @@ public class PessoaService {
             String message = "Campo " + fieldName.trim() + " não pode ser vazio";
             throw new IllegalArgumentException(message);
         }
+    }
+
+    public void cadastrarProfessor(String cpf, String nome, String siape, String[] disciplinas, String[] habilidades) {
+        this.validarCampoVazio(cpf, "cpf");
+        this.validarCampoVazio(nome, "nome");
+        this.validarCampoVazio(siape, "siape");
+
+        this.pessoaRepository.cadastrarProfessor(cpf, nome, siape, disciplinas, habilidades);
+    }
+
+    public void definirFuncaoAluno(String cpf, String matricula, int periodo) {
+        this.validarContemCpf(cpf);
+        this.pessoaRepository.definirFuncaoAluno(cpf, matricula, periodo);
+    }
+
+    public void definirFuncaoProfessor(String cpf, String siape, String[] disciplinas) {
+        this.validarContemCpf(cpf);
+        this.pessoaRepository.definirFuncaoProfessor(cpf, siape, disciplinas);
+    }
+
+    public void removerFuncao(String cpf) {
+        this.validarContemCpf(cpf);
+        this.pessoaRepository.removerFuncao(cpf);
+    }
+
+    public int pegarNivel(String cpf) {
+        this.validarContemCpf(cpf);
+        return this.pessoaRepository.getNivel(cpf);
+    }
+
+    public String[] listarPessoas() {
+        return this.pessoaRepository.listarPessoas();
     }
 }

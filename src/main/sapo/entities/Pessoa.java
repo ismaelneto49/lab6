@@ -1,7 +1,6 @@
 package sapo.entities;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class Pessoa {
 
@@ -65,16 +64,16 @@ public class Pessoa {
         return this.nome;
     }
 
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
     public int getNivel() {
         return this.nivel + this.calcularNivel();
     }
 
     public String[] getHabilidades() {
         return this.habilidades;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
     }
 
     public void setHabilidades(String[] habilidades) {

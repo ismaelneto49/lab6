@@ -1,11 +1,9 @@
 package sapo.controllers;
 
-import java.time.LocalDate;
-import java.util.Map;
-import java.util.NoSuchElementException;
-
-import sapo.entities.Comentario;
 import sapo.entities.Pessoa;
+import sapo.services.PessoaService;
+
+import java.util.Map;
 
 public class PessoaController {
 
@@ -22,24 +20,11 @@ public class PessoaController {
     }
 
     public void cadastrarAluno(String cpf, String nome, String matricula, int periodo, String[] habilidades) {
-        this.validarCampoVazio(cpf, "cpf");
-        this.validarCampoVazio(nome, "nome");
-        this.validarCampoVazio(matricula, "matricula");
-
-        Pessoa p = new Pessoa(cpf, nome, habilidades);
-        p.setFuncaoAluno(matricula, periodo);
-        this.pessoas.put(cpf, p);
-
+        this.pessoaService.cadastrarAluno(cpf, nome, matricula, periodo, habilidades);
     }
 
     public void cadastrarProfessor(String cpf, String nome, String siape, String[] disciplinas, String[] habilidades) {
-        this.validarCampoVazio(cpf, "cpf");
-        this.validarCampoVazio(nome, "nome");
-        this.validarCampoVazio(siape, "siape");
-
-        Pessoa p = new Pessoa(cpf, nome, habilidades);
-        p.setFuncaoProfessor(siape, disciplinas);
-        this.pessoas.put(cpf, p);
+        this.pessoaService.cadastrarProfessor(cpf, nome, siape, disciplinas, habilidades);
     }
 
     public Pessoa recuperarPessoa(String cpf) {
@@ -59,35 +44,23 @@ public class PessoaController {
     }
 
     public void definirFuncaoAluno(String cpf, String matricula, int periodo) {
-        this.validarContemCpf(cpf);
-        this.recuperarPessoa(cpf).setFuncaoAluno(matricula, periodo);
+        this.pessoaService.definirFuncaoAluno(cpf, matricula, periodo);
     }
 
     public void definirFuncaoProfessor(String cpf, String siape, String[] disciplinas) {
-        this.validarContemCpf(cpf);
-        this.recuperarPessoa(cpf).setFuncaoProfessor(siape, disciplinas);
+        this.pessoaService.definirFuncaoProfessor(cpf, siape, disciplinas);
     }
 
     public void removerFuncao(String cpf) {
-        this.validarContemCpf(cpf);
-        this.recuperarPessoa(cpf).removerFuncao();
+        this.pessoaService.removerFuncao(cpf);
     }
 
     public int pegarNivel(String cpf) {
-        this.validarContemCpf(cpf);
-        Pessoa pessoa = this.recuperarPessoa(cpf);
-        return pessoa.getNivel();
+        return this.pessoaService.pegarNivel(cpf);
     }
 
     public String[] listarPessoas() {
-        List<Pessoa> pessoas = new ArrayList<>(this.pessoas.values());
-        String[] pessoasString = new String[pessoas.size()];
-
-        for (int i = 0; i < pessoasString.length; i++) {
-            pessoasString[i] = pessoas.get(i).toString();
-        }
-
-        return pessoasString;
+        return this.pessoaService.listarPessoas();
     }
 
     public void removerPessoa(String cpf) {
