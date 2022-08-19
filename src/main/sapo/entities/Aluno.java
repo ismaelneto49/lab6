@@ -1,5 +1,7 @@
 package sapo.entities;
 
+import sapo.interfaces.Funcao;
+
 import java.util.HashMap;
 import java.util.Map;
 
