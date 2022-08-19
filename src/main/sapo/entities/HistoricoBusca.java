@@ -2,10 +2,19 @@ package sapo.entities;
 
 import sapo.interfaces.Busca;
 
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 public class HistoricoBusca {
 
-    private Map<String, Busca> buscas;
+    private List<Busca> buscas;
+
+    public HistoricoBusca() {
+        this.buscas = new ArrayList<>();
+    }
+
+    public void save(Busca busca) {
+        this.buscas.add(busca);
+    }
 
 }
