@@ -7,7 +7,6 @@ import sapo.entities.Pessoa;
 import java.util.NoSuchElementException;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class PessoaControllerTest {
 

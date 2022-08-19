@@ -8,6 +8,11 @@ public class BuscaController {
 //    private AtividadeService atividadeService;
 //    private TarefaService tarefaService;
 
+
+    public BuscaController(PessoaService pessoaService) {
+        this.pessoaService = pessoaService;
+    }
+
     public String[] exibirPessoas(String consulta) {
         return this.pessoaService.buscar(consulta.split(" "));
     }

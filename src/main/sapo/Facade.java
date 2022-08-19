@@ -1,6 +1,7 @@
 package sapo;
 
 import sapo.controllers.AtividadeController;
+import sapo.controllers.BuscaController;
 import sapo.controllers.PessoaController;
 import sapo.controllers.TarefaController;
 import sapo.entities.Atividade;
@@ -17,6 +18,7 @@ public class Facade {
     private AtividadeController atividadeController;
     private TarefaController tarefaController;
     private PessoaController pessoaController;
+    private BuscaController buscaController;
 
     private PessoaService pessoaService;
 
@@ -30,6 +32,7 @@ public class Facade {
         this.pessoaController = new PessoaController(this.pessoaService);
         this.atividadeController = new AtividadeController(new HashMap<>(), this.pessoaController);
         this.tarefaController = new TarefaController(new HashMap<>(), this.atividadeController, this.pessoaController);
+        this.buscaController = new BuscaController(this.pessoaService);
     }
 
     public void cadastrarPessoa(String cpf, String nome, String[] habilidades) {
@@ -162,6 +165,10 @@ public class Facade {
 
     public void removerPessoaTarefa(String cpf, String idTarefa) {
         this.tarefaController.removerPessoaTarefa(cpf, idTarefa);
+    }
+
+    public String[] exibirPessoas(String consulta) {
+        return this.pessoaService.buscar(consulta.split(" "));
     }
 
 }

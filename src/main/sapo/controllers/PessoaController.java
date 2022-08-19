@@ -3,8 +3,6 @@ package sapo.controllers;
 import sapo.entities.Pessoa;
 import sapo.services.PessoaService;
 
-import java.util.Map;
-
 public class PessoaController {
 
     private PessoaService pessoaService;

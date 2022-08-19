@@ -168,6 +168,6 @@ public class Pessoa {
     }
 
     public boolean hasHabilidade(String habilidade) {
-        return Arrays.asList(this.habilidades).contains(habilidade);
+        return Arrays.asList(this.habilidades).contains(habilidade.toLowerCase());
     }
 }

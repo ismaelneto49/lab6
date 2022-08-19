@@ -7,6 +7,7 @@ import sapo.entities.TipoBusca;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -140,22 +141,32 @@ public class PessoaRepository {
     }
 
     private List<Pessoa> filterPessoasByNome(String nome) {
-        List<Pessoa> resultado = this.pessoas.values().stream().filter(pessoa -> pessoa.getNome().contains(nome)).collect(Collectors.toList());
+        List<Pessoa> resultado = this.pessoas.values()
+                .stream()
+                .filter(pessoa -> pessoa.getNome().toLowerCase().contains(nome))
+                .collect(Collectors.toList());
         return resultado;
     }
 
     private List<Pessoa> filterPessoasByHabilidade(String habilidade) {
-        List<Pessoa> resultado = this.pessoas.values().stream().filter(pessoa -> pessoa.hasHabilidade(habilidade)).collect(Collectors.toList());
+        List<Pessoa> resultado = this.pessoas.values()
+                .stream()
+                .filter(pessoa -> pessoa.hasHabilidade(habilidade))
+                .collect(Collectors.toList());
         return resultado;
     }
 
     private List<Pessoa> funnelByNome(List<Pessoa> pessoas, String nome) {
-        List<Pessoa> resultado = pessoas.stream().filter(pessoa -> pessoa.getNome().contains(nome)).collect(Collectors.toList());
+        List<Pessoa> resultado = pessoas.stream()
+                .filter(pessoa -> pessoa.getNome().toLowerCase().contains(nome))
+                .collect(Collectors.toList());
         return resultado;
     }
 
     private List<Pessoa> funnelByHabilidade(List<Pessoa> pessoas, String habilidade) {
-        List<Pessoa> resultado = pessoas.stream().filter(pessoa -> pessoa.hasHabilidade(habilidade)).collect(Collectors.toList());
+        List<Pessoa> resultado = pessoas.stream()
+                .filter(pessoa -> pessoa.hasHabilidade(habilidade))
+                .collect(Collectors.toList());
         return resultado;
     }
 
@@ -164,7 +175,10 @@ public class PessoaRepository {
     }
 
     private boolean ehNome(String termo) {
-        List<String> nomes = pessoas.values().stream().map(pessoa -> pessoa.getNome()).collect(Collectors.toList());
+        List<String> nomes = pessoas.values()
+                .stream()
+                .map(pessoa -> pessoa.getNome().toLowerCase())
+                .collect(Collectors.toList());
         return nomes.stream().anyMatch(nome -> nome.contains(termo));
     }
 }
