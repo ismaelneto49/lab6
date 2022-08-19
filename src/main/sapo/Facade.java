@@ -168,7 +168,34 @@ public class Facade {
     }
 
     public String[] exibirPessoas(String consulta) {
-        return this.pessoaService.buscar(consulta.split(" "));
+        return this.buscaController.exibirPessoas(consulta);
+    }
+
+    public String[] buscarAtividade(String consulta) {
+        return this.buscaController.buscarAtividade(consulta);
+    }
+
+    public String[] buscarTarefas(String nome) {
+        return this.buscaController.buscarTarefas(nome);
+    }
+
+    public String[] buscarTarefas(String idAtividade, String nome) {
+        return this.buscaController.buscarTarefas(idAtividade, nome);
+
+    }
+
+    public String[] sugerirTarefas(String id, String cpf) {
+        return this.buscaController.sugerirTarefas(id, cpf);
+    }
+
+    public String[] buscasMaisRecentes(int nBuscas) {
+        return this.buscaController.buscasMaisRecentes(nBuscas);
+
+    }
+
+    public String[] exibirHistoricoBusca(int indexBusca) {
+        return this.buscaController.exibirHistoricoBusca(indexBusca);
+
     }
 
 }

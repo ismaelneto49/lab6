@@ -17,4 +17,8 @@ public class HistoricoBusca {
         this.buscas.add(busca);
     }
 
+    public Busca getBuscaById(int id) {
+        return this.buscas.get(id);
+    }
+
 }

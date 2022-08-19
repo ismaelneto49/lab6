@@ -1,9 +1,12 @@
 package sapo.controllers;
 
-import sapo.entities.BuscaPessoa;
-import sapo.entities.HistoricoBusca;
+import sapo.entities.*;
 import sapo.interfaces.Busca;
 import sapo.services.PessoaService;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class BuscaController {
 
@@ -19,7 +22,7 @@ public class BuscaController {
     }
 
     public String[] exibirPessoas(String consulta) {
-        Busca buscaPessoa = new BuscaPessoa(this.pessoaService);
+        Busca buscaPessoa = new BuscaPessoa(this.pessoaService, consulta.split(" "));
         String[] resultado = buscaPessoa.buscar(consulta.split(" "));
         this.historicoBusca.save(buscaPessoa);
         return resultado;
@@ -46,7 +49,22 @@ public class BuscaController {
     }
 
     public String[] exibirHistoricoBusca(int indexBusca) {
-        return null;
+        Busca busca = this.historicoBusca.getBuscaById(indexBusca);
+        List<String> retorno = new ArrayList<>();
+
+        String tipo = "";
+        if (busca.getClass() == BuscaPessoa.class) {
+            tipo = "PESSOA";
+        } else if (busca.getClass() == BuscaAtividade.class) {
+            tipo = "ATIVIDADE";
+        } else if (busca.getClass() == BuscaTarefa.class) {
+            tipo = "TAREFA";
+        } else {
+            tipo = "SUGESTÃO";
+        }
+        retorno.add(tipo);
+        retorno.addAll(Arrays.asList(busca.buscar(busca.getConsulta())));
+        return retorno.toArray(new String[]{});
     }
 
 }
