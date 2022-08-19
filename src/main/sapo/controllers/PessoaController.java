@@ -7,11 +7,9 @@ import java.util.Map;
 
 public class PessoaController {
 
-    private Map<String, Pessoa> pessoas;
     private PessoaService pessoaService;
 
-    public PessoaController(Map<String, Pessoa> pessoas, PessoaService pessoaService) {
-        this.pessoas = pessoas;
+    public PessoaController(PessoaService pessoaService) {
         this.pessoaService = pessoaService;
     }
 
