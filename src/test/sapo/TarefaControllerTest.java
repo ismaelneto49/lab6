@@ -199,4 +199,40 @@ public class TarefaControllerTest {
             assertEquals("Não é possível remover pessoa responsável em uma tarefa já concluída", ise.getMessage());
         }
     }
+
+    @Test
+    void testCadastrarTarefaGerencial() {
+        String t1 = this.facade.cadastrarTarefa(this.idAtividade, "tarefa", new String[]{"hab1", "hab3"});
+        String t2 = this.facade.cadastrarTarefa(this.idAtividade, "tarefa2", new String[]{"hab1"});
+        String tg1 = this.facade.cadastrarTarefaGerencial(this.idAtividade, "tarefa", new String[]{"hab1", "hab3"}, new String[]{t1, t2});
+        assertEquals("TVD-0-2", tg1);
+    }
+
+    @Test
+    void testAdicionarNaTarefaGerencial() {
+        String t1 = this.facade.cadastrarTarefa(this.idAtividade, "tarefa", new String[]{"hab1", "hab3"});
+        String tg1 = this.facade.cadastrarTarefaGerencial(this.idAtividade, "tarefa", new String[]{"hab1", "hab3"}, new String[]{});
+        this.facade.adicionarNaTarefaGerencial(tg1, t1);
+        assertEquals(1, this.facade.contarTodasTarefasNaTarefaGerencial(tg1));
+    }
+
+    @Test
+    void testRemoverDaTarefaGerencial() {
+        String t1 = this.facade.cadastrarTarefa(this.idAtividade, "tarefa", new String[]{"hab1", "hab3"});
+        String tg1 = this.facade.cadastrarTarefaGerencial(this.idAtividade, "tarefa", new String[]{"hab1", "hab3"}, new String[]{t1});
+
+        assertEquals(1, this.facade.contarTodasTarefasNaTarefaGerencial(tg1));
+        this.facade.removerDaTarefaGerencial(tg1, t1);
+        assertEquals(0, this.facade.contarTodasTarefasNaTarefaGerencial(tg1));
+    }
+
+    @Test
+    void testContarTodasTarefasNaTarefaGerencial() {
+        String t1 = this.facade.cadastrarTarefa(this.idAtividade, "tarefa", new String[]{"hab1", "hab3"});
+        String t2 = this.facade.cadastrarTarefa(this.idAtividade, "tarefa", new String[]{"hab1", "hab3"});
+        String tg1 = this.facade.cadastrarTarefaGerencial(this.idAtividade, "tarefa", new String[]{"hab1", "hab3"}, new String[]{t1, t2});
+
+        assertEquals(2, this.facade.contarTodasTarefasNaTarefaGerencial(tg1));
+    }
+
 }
