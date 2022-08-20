@@ -20,6 +20,7 @@ public class Atividade {
         this.descricao = descricao;
         this.responsavel = responsavel;
         this.tarefas = new ArrayList<>();
+        this.tarefasGerenciais = new ArrayList<>();
     }
 
     public String getNome() {

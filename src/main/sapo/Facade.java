@@ -20,7 +20,7 @@ public class Facade {
     public Facade() {
         this.pessoaController = new PessoaController(new HashMap<>());
         this.atividadeController = new AtividadeController(new HashMap<>(), this.pessoaController);
-        this.tarefaController = new TarefaController(new HashMap<>(), this.atividadeController, this.pessoaController);
+        this.tarefaController = new TarefaController(new HashMap<>(), new HashMap<>(), this.atividadeController, this.pessoaController);
     }
 
     public void cadastrarPessoa(String cpf, String nome, String[] habilidades) {

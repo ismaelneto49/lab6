@@ -14,10 +14,11 @@ public class TarefaController {
     private AtividadeController atividadeController;
     private PessoaController pessoaController;
 
-    public TarefaController(Map<Atividade, Map<String, Tarefa>> tarefas, AtividadeController atividadeController, PessoaController pessoaController) {
+    public TarefaController(Map<Atividade, Map<String, Tarefa>> tarefas, Map<Atividade, Map<String, TarefaGerencial>> tarefasGerenciais, AtividadeController atividadeController, PessoaController pessoaController) {
         this.tarefas = tarefas;
         this.atividadeController = atividadeController;
         this.pessoaController = pessoaController;
+        this.tarefasGerenciais = tarefasGerenciais;
     }
 
     public String cadastrarTarefa(String atividadeId, String nome, String[] habilidades) {
@@ -130,9 +131,9 @@ public class TarefaController {
         String idNovaTarefa = atividadeId + "-" + numeroNovaTarefa;
         TarefaGerencial novaTarefa = new TarefaGerencial(idNovaTarefa, nome, 0, atividade);
         atividade.cadastrarTarefaGerencial(novaTarefa);
-        boolean atividadeNaoTemTarefa = Objects.isNull(this.tarefas.get(atividade));
+        boolean atividadeNaoTemTarefaGerencial = Objects.isNull(this.tarefasGerenciais.get(atividade));
 
-        if (atividadeNaoTemTarefa) {
+        if (atividadeNaoTemTarefaGerencial) {
             this.tarefasGerenciais.put(atividade, new HashMap<>());
         }
 
