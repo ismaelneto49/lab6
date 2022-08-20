@@ -4,92 +4,114 @@ import sapo.entities.Atividade;
 import sapo.entities.Pessoa;
 import sapo.entities.Tarefa;
 import sapo.entities.TarefaGerencial;
+import sapo.repositories.AtividadeRepository;
+import sapo.repositories.PessoaRepository;
+import sapo.repositories.TarefaRepository;
 
 import java.util.*;
 
 public class TarefaController {
 
-    private Map<Atividade, Map<String, Tarefa>> tarefas;
-    private Map<Atividade, Map<String, TarefaGerencial>> tarefasGerenciais;
-    private AtividadeController atividadeController;
-    private PessoaController pessoaController;
+    private PessoaRepository pessoaRepository;
+    private AtividadeRepository atividadeRepository;
+    private TarefaRepository tarefaRepository;
 
-    public TarefaController(Map<Atividade, Map<String, Tarefa>> tarefas, Map<Atividade, Map<String, TarefaGerencial>> tarefasGerenciais, AtividadeController atividadeController, PessoaController pessoaController) {
-        this.tarefas = tarefas;
-        this.atividadeController = atividadeController;
-        this.pessoaController = pessoaController;
-        this.tarefasGerenciais = tarefasGerenciais;
+    public TarefaController(PessoaRepository pessoaRepository, AtividadeRepository atividadeRepository, TarefaRepository tarefaRepository) {
+        this.pessoaRepository = pessoaRepository;
+        this.atividadeRepository = atividadeRepository;
+        this.tarefaRepository = tarefaRepository;
     }
 
     public String cadastrarTarefa(String atividadeId, String nome, String[] habilidades) {
-        Atividade atividade = this.atividadeController.validarIdAtividade(atividadeId);
+        this.validarParametro(atividadeId, "ID da Atividade");
         this.validarParametro(nome, "nome");
-        int numeroNovaTarefa = this.calcularQuantidadeTarefas();
-        String idNovaTarefa = atividadeId + "-" + numeroNovaTarefa;
-        Tarefa novaTarefa = new Tarefa(idNovaTarefa, nome, 0, atividade, habilidades);
-        atividade.cadastrarTarefa(novaTarefa);
-        boolean atividadeNaoTemTarefa = Objects.isNull(this.tarefas.get(atividade));
+        this.validarIdAtividade(atividadeId);
+        Atividade atividade = this.atividadeRepository.getAtividadeById(atividadeId);
+        return this.tarefaRepository.cadastrarTarefa(atividade, nome, habilidades);
 
-        if (atividadeNaoTemTarefa) {
-            this.tarefas.put(atividade, new HashMap<>());
-        }
-        this.tarefas.get(atividade).put(idNovaTarefa, novaTarefa);
-
-        return idNovaTarefa;
     }
 
     public void alterarNomeTarefa(String idTarefa, String novoNome) {
-        Tarefa tarefa = this.validarIdTarefa(idTarefa);
-        this.validarParametro(novoNome, "novo nome");
-        tarefa.setNome(novoNome);
+        this.validarParametro(idTarefa, "ID da Tarefa");
+        this.validarParametro(novoNome, "Novo nome");
+        this.validarIdTarefa(idTarefa);
+        this.tarefaRepository.alterarNomeTarefa(idTarefa, novoNome);
 
     }
 
     public void alterarHabilidadesTarefa(String idTarefa, String[] habilidades) {
-        Tarefa tarefa = this.validarIdTarefa(idTarefa);
-        tarefa.setHabilidades(habilidades);
+        this.validarParametro(idTarefa, "ID da Tarefa");
+        this.validarIdTarefa(idTarefa);
+        this.tarefaRepository.alterarHabilidadesTarefa(idTarefa, habilidades);
     }
 
     public void adicionarHorasTarefa(String idTarefa, int horas) {
-        Tarefa tarefa = this.validarIdTarefa(idTarefa);
-        tarefa.adicionarHoras(horas);
+        this.validarParametro(idTarefa, "ID da Tarefa");
+        this.validarIdTarefa(idTarefa);
+        this.tarefaRepository.adicionarHorasTarefa(idTarefa, horas);
     }
 
     public void removerHorasTarefa(String idTarefa, int horas) {
-        Tarefa tarefa = this.validarIdTarefa(idTarefa);
-        tarefa.removerHoras(horas);
+        this.validarIdTarefa(idTarefa);
+        this.tarefaRepository.removerHorasTarefa(idTarefa, horas);
     }
 
     public void concluirTarefa(String idTarefa) {
-        Tarefa tarefa = this.validarIdTarefa(idTarefa);
-        tarefa.concluirTarefa();
+        this.validarIdTarefa(idTarefa);
+        this.tarefaRepository.concluirTarefa(idTarefa);
     }
 
     public String exibirTarefa(String idTarefa) {
-        Tarefa tarefa = this.validarIdTarefa(idTarefa);
-        return tarefa.toString();
+        this.validarIdTarefa(idTarefa);
+        return this.tarefaRepository.exibirTarefa(idTarefa);
     }
 
     public void associarPessoaTarefa(String cpf, String idTarefa) {
-        Pessoa pessoa = pessoaController.recuperarPessoa(cpf);
-        Tarefa tarefa = this.validarIdTarefa(idTarefa);
-        tarefa.adicionarPessoaResponsavel(pessoa);
-        pessoa.adicionarTarefa(tarefa);
+        this.validarContemCpf(cpf);
+        this.validarIdTarefa(idTarefa);
+        Pessoa pessoa = this.pessoaRepository.getPessoaByCpf(cpf);
+        this.tarefaRepository.associarPessoaTarefa(pessoa, idTarefa);
+
     }
 
     public void removerPessoaTarefa(String cpf, String idTarefa) {
-        Pessoa pessoa = pessoaController.recuperarPessoa(cpf);
-        Tarefa tarefa = this.validarIdTarefa(idTarefa);
-        tarefa.removerPessoaResponsavel(pessoa);
-        pessoa.removerTarefa(tarefa);
+        this.validarContemCpf(cpf);
+        this.validarIdTarefa(idTarefa);
+        Pessoa pessoa = this.pessoaRepository.getPessoaByCpf(cpf);
+        this.tarefaRepository.removerPessoaTarefa(pessoa, idTarefa);
     }
 
-    private int calcularQuantidadeTarefas() {
-        int quantidadeTarefas = 0;
-        for (Map<String, Tarefa> tarefasPorAtividade : this.tarefas.values()) {
-            quantidadeTarefas += tarefasPorAtividade.size();
+
+    public String cadastrarTarefaGerencial(String atividadeId, String nome, String[] habilidades, String[] idTarefas) {
+        this.validarParametro(atividadeId, "ID da Atividade");
+        this.validarParametro(nome, "Nome");
+        this.validarIdAtividade(atividadeId);
+
+        Atividade atividade = this.atividadeRepository.getAtividadeById(atividadeId);
+
+        for (String idTarefa : idTarefas) {
+            this.validarIdTarefa(idTarefa);
         }
-        return quantidadeTarefas;
+
+        return this.tarefaRepository.cadastrarTarefaGerencial(atividade, nome, habilidades, idTarefas);
+
+    }
+
+    public void adicionarNaTarefaGerencial(String idTarefaGerencial, String idTarefa) {
+        this.validarIdTarefa(idTarefa);
+        this.validarIdTarefaGerencial(idTarefaGerencial);
+        this.tarefaRepository.adicionarNaTarefaGerencial(idTarefaGerencial, idTarefa);
+    }
+
+    public void removerDaTarefaGerencial(String idTarefaGerencial, String idTarefa) {
+        this.validarIdTarefa(idTarefa);
+        this.validarIdTarefaGerencial(idTarefaGerencial);
+        this.tarefaRepository.removerDaTarefaGerencial(idTarefaGerencial, idTarefa);
+    }
+
+    public int contarTodasTarefasNaTarefaGerencial(String idTarefaGerencial) {
+        this.validarIdTarefaGerencial(idTarefaGerencial);
+        return tarefaRepository.contarTodasTarefasNaTarefaGerencial(idTarefaGerencial);
     }
 
     private void validarParametro(String parametro, String nomeParametro) {
@@ -98,66 +120,33 @@ public class TarefaController {
         }
     }
 
+    private void validarContemCpf(String cpf) {
+        if (!this.pessoaRepository.contains(cpf)) {
+            throw new NoSuchElementException("CPF fornecido não pertence a nenhuma Pessoa");
+        }
+    }
+
+    private void validarIdAtividade(String id) {
+        if (!this.atividadeRepository.contains(id)) {
+            throw new NoSuchElementException("ID fornecido não pertence a nenhuma Atividade");
+        }
+    }
+
     private Tarefa validarIdTarefa(String id) {
-        Optional<Tarefa> optionalTarefa = this.recuperarTarefa(id);
-        if (optionalTarefa.isEmpty()) {
-            throw new NoSuchElementException("O id passado não pertence a nenhuma atividade");
-        }
-        return optionalTarefa.get();
-    }
-
-    private Optional<Tarefa> recuperarTarefa(String id) {
-        for (Map<String, Tarefa> tarefasPorAtividade : this.tarefas.values()) {
-            if (Objects.nonNull(tarefasPorAtividade.get(id))) {
-                return Optional.of(tarefasPorAtividade.get(id));
-            }
-        }
-        return Optional.empty();
-    }
-
-    private Optional<TarefaGerencial> recuperarTarefaGerencial(String id) {
-        for (Map<String, TarefaGerencial> tarefasPorAtividade : this.tarefasGerenciais.values()) {
-            if (Objects.nonNull(tarefasPorAtividade.get(id))) {
-                return Optional.of(tarefasPorAtividade.get(id));
-            }
-        }
-        return Optional.empty();
-    }
-
-    public String cadastrarTarefaGerencial(String atividadeId, String nome, String[] habilidades, String[] idTarefas) {
-        Atividade atividade = this.atividadeController.validarIdAtividade(atividadeId);
-        this.validarParametro(nome, "nome");
-        int numeroNovaTarefa = this.calcularQuantidadeTarefas();
-        String idNovaTarefa = atividadeId + "-" + numeroNovaTarefa;
-        TarefaGerencial novaTarefa = new TarefaGerencial(idNovaTarefa, nome, 0, atividade);
-        atividade.cadastrarTarefaGerencial(novaTarefa);
-        boolean atividadeNaoTemTarefaGerencial = Objects.isNull(this.tarefasGerenciais.get(atividade));
-
-        if (atividadeNaoTemTarefaGerencial) {
-            this.tarefasGerenciais.put(atividade, new HashMap<>());
+        if (this.tarefaRepository.containsTarefa(id)) {
+            return this.tarefaRepository.getTarefaById(id);
         }
 
-        for (String id : idTarefas) {
-            Tarefa t = this.recuperarTarefa(id).get();
-            novaTarefa.addSubtarefa(t);
+        throw new NoSuchElementException("O id passado não pertence a nenhuma atividade");
+    }
+
+    private TarefaGerencial validarIdTarefaGerencial(String id) {
+        if (this.tarefaRepository.containsTarefaGerencial(id)) {
+            return this.tarefaRepository.getTarefaGerencialById(id);
         }
 
-        this.tarefasGerenciais.get(atividade).put(idNovaTarefa, novaTarefa);
-
-        return idNovaTarefa;
+        throw new NoSuchElementException("O id passado não pertence a nenhuma atividade gerencial");
     }
 
-    public void adicionarNaTarefaGerencial(String idTarefaGerencial, String idTarefa) {
-        Tarefa t = this.recuperarTarefa(idTarefa).get();
-        this.recuperarTarefaGerencial(idTarefaGerencial).get().addSubtarefa(t);
-    }
 
-    public void removerDaTarefaGerencial(String idTarefaGerencial, String idTarefa) {
-        Tarefa t = this.recuperarTarefa(idTarefa).get();
-        this.recuperarTarefaGerencial(idTarefaGerencial).get().removerTarefa(t);
-    }
-
-    public int contarTodasTarefasNaTarefaGerencial(String idTarefaGerencial) {
-        return this.recuperarTarefaGerencial(idTarefaGerencial).get().contarTarefas();
-    }
 }
