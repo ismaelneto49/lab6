@@ -6,7 +6,9 @@ import sapo.controllers.PessoaController;
 import sapo.controllers.TarefaController;
 import sapo.entities.Atividade;
 import sapo.entities.Pessoa;
+import sapo.repositories.AtividadeRepository;
 import sapo.repositories.PessoaRepository;
+import sapo.repositories.TarefaRepository;
 import sapo.services.PessoaService;
 
 import java.util.HashMap;
@@ -20,19 +22,19 @@ public class Facade {
     private PessoaController pessoaController;
     private BuscaController buscaController;
 
-    private PessoaService pessoaService;
-
-    private PessoaRepository pessoaRepository;
 
     public Facade() {
-        this.pessoaRepository = new PessoaRepository(new HashMap<>());
+        PessoaRepository pessoaRepository = new PessoaRepository(new HashMap<>());
+        AtividadeRepository atividadeRepository = new AtividadeRepository(new HashMap<>());
+        TarefaRepository tarefaRepository = new TarefaRepository(new HashMap<>(), new HashMap<>());
 
-        this.pessoaService = new PessoaService(this.pessoaRepository);
+        // TODO: Remove PessoaService
+        PessoaService pessoaService = new PessoaService(pessoaRepository);
 
-        this.pessoaController = new PessoaController(this.pessoaService);
-        this.atividadeController = new AtividadeController(new HashMap<>(), this.pessoaController);
-        this.tarefaController = new TarefaController( new HashMap<>(), new HashMap<>(), this.atividadeController, this.pessoaController);
-        this.buscaController = new BuscaController(this.pessoaService);
+        this.pessoaController = new PessoaController(pessoaService);
+        this.atividadeController = new AtividadeController(pessoaRepository, atividadeRepository);
+        this.tarefaController = new TarefaController(pessoaRepository, atividadeRepository, tarefaRepository);
+        this.buscaController = new BuscaController(pessoaService);
     }
 
     public void cadastrarPessoa(String cpf, String nome, String[] habilidades) {

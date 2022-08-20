@@ -2,110 +2,85 @@ package sapo.controllers;
 
 import sapo.entities.Atividade;
 import sapo.entities.Pessoa;
+import sapo.repositories.AtividadeRepository;
+import sapo.repositories.PessoaRepository;
 
 import java.util.*;
 
 public class AtividadeController {
-    private Map<Pessoa, Map<String, Atividade>> atividades;
-    private PessoaController pessoaController;
+    private PessoaRepository pessoaRepository;
+    private AtividadeRepository atividadeRepository;
 
-    public AtividadeController (Map<Pessoa, Map<String, Atividade>> atividades, PessoaController pessoaController) {
-        this.atividades = atividades;
-        this.pessoaController = pessoaController;
+    public AtividadeController(PessoaRepository pessoaRepository, AtividadeRepository atividadeRepository) {
+        this.pessoaRepository = pessoaRepository;
+        this.atividadeRepository = atividadeRepository;
     }
-    
+
     public String cadastrarAtividade(String nome, String descricao, String cpf) {
         this.validarParametro(nome, "nome");
         this.validarParametro(descricao, "descrição");
         this.validarParametro(cpf, "CPF");
-        Pessoa responsavel = this.pessoaController.recuperarPessoa(cpf);
-        String atividadeId = this.gerarIdAtividade(nome);
-        Atividade novaAtividade = new Atividade(atividadeId, nome, descricao, responsavel);
-        boolean pessoaNaoTemAtividade = Objects.isNull(this.atividades.get(responsavel));
-        if (pessoaNaoTemAtividade) {
-            this.atividades.put(responsavel, new HashMap<>());
-        }
-        this.atividades.get(responsavel).put(atividadeId, novaAtividade);
-        return atividadeId;
+        this.validarContemCpf(cpf);
+        Pessoa responsavel = this.pessoaRepository.getPessoaByCpf(cpf);
+        return this.atividadeRepository.cadastrarAtividade(nome, descricao, responsavel);
     }
 
     public Optional<Atividade> recuperarAtividade(String id) {
-        for (Map<String, Atividade> atividadesPorPessoa : this.atividades.values()) {
-            if (Objects.nonNull(atividadesPorPessoa.get(id))) {
-                return Optional.of(atividadesPorPessoa.get(id));
-            }
+        if (this.atividadeRepository.contains(id)) {
+            return Optional.of(this.atividadeRepository.getAtividadeById(id));
         }
         return Optional.empty();
     }
 
     public void encerrarAtividade(String id) {
-        Atividade atividade = this.validarIdAtividade(id);
-        atividade.encerrar();
+        this.validarIdAtividade(id);
+        this.atividadeRepository.encerrarAtividade(id);
     }
 
     public void desativarAtividade(String id) {
-        Atividade atividade = this.validarIdAtividade(id);
-        atividade.desativar();
+        this.validarIdAtividade(id);
+        this.atividadeRepository.desativarAtividade(id);
     }
 
     public void reabrirAtividade(String id) {
-        Atividade atividade = this.validarIdAtividade(id);
-        atividade.reabrir();
+        this.validarIdAtividade(id);
+        this.atividadeRepository.reabrirAtividade(id);
     }
 
     public String exibirAtividade(String id) {
-        Atividade atividade = this.validarIdAtividade(id);
-        return atividade.toString();
+        this.validarIdAtividade(id);
+        return this.atividadeRepository.exibirAtividade(id);
     }
 
     public void alterarDescricaoAtividade(String id, String descricao) {
         this.validarParametro(descricao, "descrição");
-        Atividade atividade = this.validarIdAtividade(id);
-        atividade.reabrir();
+        this.validarIdAtividade(id);
+        this.atividadeRepository.alterarDescricaoAtividade(id, descricao);
     }
 
     public void alterarResponsavelAtividade(String id, String cpf) {
         this.validarParametro(cpf, "cpf");
-        Atividade atividade = this.validarIdAtividade(id);
-        Pessoa novoResponsavel = this.pessoaController.recuperarPessoa(cpf);
-        atividade.setResponsavel(novoResponsavel);
+        this.validarIdAtividade(id);
+        this.validarContemCpf(cpf);
+        Pessoa novoResponsavel = this.pessoaRepository.getPessoaByCpf(cpf);
+        this.atividadeRepository.alterarResponsavelAtividade(id, novoResponsavel);
     }
 
-    private String gerarIdAtividade(String nome) {
-        StringBuilder consoantesBuilder = new StringBuilder();
-        int numeroNovaAtividade = this.calcularQuantidadeAtividades();
-        final String CONSOANTES = "bcdfghjklmnpqrstvwxyz";
-
-        for (int i = 0; i < nome.length(); i ++) {
-            String caractere = Character.toString(nome.charAt(i));
-            if (CONSOANTES.contains(caractere.toLowerCase())) {
-                consoantesBuilder.append(caractere);
-            }
-        }
-        String consoantesFallback = new String(new char[3]).replace("\0", "X");
-        consoantesBuilder.append(consoantesFallback);
-        String consoantesId = consoantesBuilder.toString().substring(0, 3).toUpperCase();
-        return consoantesId + "-" + numeroNovaAtividade;
-    }
-
-    private int calcularQuantidadeAtividades() {
-        int quantidadeAtividades = 0;
-        for (Map<String, Atividade> atividadesPorPessoa : this.atividades.values()) {
-            quantidadeAtividades += atividadesPorPessoa.size();
-        }
-        return quantidadeAtividades;
-    }
     private void validarParametro(String parametro, String nomeParametro) {
         if (Objects.isNull(parametro) || parametro.isBlank()) {
             throw new IllegalArgumentException("Campo " + nomeParametro + " não pode ser nulo ou vazio.");
         }
     }
 
-    public Atividade validarIdAtividade(String id) {
-        Optional<Atividade> optionalAtividade = this.recuperarAtividade(id);
-        if (optionalAtividade.isEmpty()) {
-            throw new NoSuchElementException("O id passado não pertence a nenhuma atividade");
+    private void validarContemCpf(String cpf) {
+        if (!this.pessoaRepository.contains(cpf)) {
+            throw new NoSuchElementException("CPF fornecido não pertence a nenhuma Pessoa");
         }
-        return optionalAtividade.get();
+    }
+
+    private void validarIdAtividade(String id) {
+        if (!this.atividadeRepository.contains(id)) {
+            throw new NoSuchElementException("ID fornecido não pertence a nenhuma Atividade");
+        }
     }
 }
