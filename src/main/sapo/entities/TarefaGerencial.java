@@ -1,26 +1,49 @@
 package sapo.entities;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
-public class Tarefa {
+public class TarefaGerencial {
 
     private String id;
     private String nome;
     private int duracao;
     private Atividade atividade;
     private boolean isConcluida;
-    private String[] habilidades;
     private Set<Pessoa> pessoasResponsaveis;
+    private List<Tarefa> subtarefas;
 
-    public Tarefa(String id, String nome, int duracao, Atividade atividade, String[] habilidades) {
+    public TarefaGerencial(String id, String nome, int duracao, Atividade atividade) {
         this.id = id;
         this.nome = nome;
         this.duracao = duracao;
         this.atividade = atividade;
-        this.isConcluida = false;
-        this.habilidades = habilidades;
-        pessoasResponsaveis = new HashSet<>();
+        this.pessoasResponsaveis = new HashSet<>();
+        this.subtarefas = new ArrayList<>();
+    }
+
+    public int contarTarefas() {
+        return this.subtarefas.size();
+    }
+
+    public void removerTarefa(Tarefa tarefa) {
+        this.subtarefas.remove(tarefa);
+    }
+
+    public void addSubtarefa(Tarefa t) {
+        this.subtarefas.add(t);
+    }
+
+    public int getDuracao() {
+        return this.duracao;
+    }
+
+    public String[] getHabilidades() {
+        Set<String> habilidades = new HashSet<>();
+        habilidades.add("gestão");
+        for (Tarefa t : this.subtarefas) {
+            habilidades.addAll(Arrays.asList(t.getHabilidades()));
+        }
+        return habilidades.toArray(new String[]{});
     }
 
     public boolean getIsConcluida() {
@@ -39,18 +62,16 @@ public class Tarefa {
         return this.pessoasResponsaveis;
     }
 
-    public String[] getHabilidades() {
-        return this.habilidades;
-    }
-
-
-    public void setHabilidades(String[] novasHabilidades) {
-        this.habilidades = novasHabilidades;
-    }
-
     public void concluirTarefa() {
         if (this.isConcluida) {
             throw new IllegalStateException("A tarefa já está concluída");
+        }
+        for (Tarefa t : this.subtarefas) {
+            if (t.getIsConcluida()) {
+                continue;
+            } else {
+                t.concluirTarefa();
+            }
         }
         this.isConcluida = true;
     }
@@ -97,7 +118,7 @@ public class Tarefa {
         StringBuilder builder = new StringBuilder();
         builder.append(this.nome + " - " + this.id + "\n");
         builder.append("- " + this.atividade.getNome() + "\n");
-        builder.append(String.join(", ", this.habilidades) + "\n");
+        builder.append(String.join(", ", this.getHabilidades()) + "\n");
         builder.append("(" + this.duracao + " hora(s) executada(s))\n");
         builder.append("===" + "\n");
         builder.append("Equipe" + "\n");
@@ -108,7 +129,5 @@ public class Tarefa {
         return builder.toString();
     }
 
-    public int getDuracao() {
-        return this.duracao;
-    }
+
 }

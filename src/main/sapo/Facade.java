@@ -20,7 +20,7 @@ public class Facade {
     public Facade() {
         this.pessoaController = new PessoaController(new HashMap<>());
         this.atividadeController = new AtividadeController(new HashMap<>(), this.pessoaController);
-        this.tarefaController = new TarefaController(new HashMap<>(), this.atividadeController, this.pessoaController);
+        this.tarefaController = new TarefaController(new HashMap<>(), new HashMap<>(), this.atividadeController, this.pessoaController);
     }
 
     public void cadastrarPessoa(String cpf, String nome, String[] habilidades) {
@@ -153,6 +153,22 @@ public class Facade {
 
     public void removerPessoaTarefa(String cpf, String idTarefa) {
         this.tarefaController.removerPessoaTarefa(cpf, idTarefa);
+    }
+
+    public String cadastrarTarefaGerencial(String atividadeId, String nome, String[] habilidades, String[] idTarefas) {
+        return this.tarefaController.cadastrarTarefaGerencial(atividadeId, nome, habilidades, idTarefas);
+    }
+
+    public void adicionarNaTarefaGerencial(String idTarefaGerencial, String idTarefa) {
+        this.tarefaController.adicionarNaTarefaGerencial(idTarefaGerencial, idTarefa);
+    }
+
+    public void removerDaTarefaGerencial(String idTarefaGerencial, String idTarefa) {
+        this.tarefaController.removerDaTarefaGerencial(idTarefaGerencial, idTarefa);
+    }
+
+    public int contarTodasTarefasNaTarefaGerencial(String idTarefaGerencial) {
+        return this.tarefaController.contarTodasTarefasNaTarefaGerencial(idTarefaGerencial);
     }
 
 }
