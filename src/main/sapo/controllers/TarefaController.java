@@ -3,18 +3,22 @@ package sapo.controllers;
 import sapo.entities.Atividade;
 import sapo.entities.Pessoa;
 import sapo.entities.Tarefa;
+import sapo.entities.TarefaGerencial;
 
 import java.util.*;
 
 public class TarefaController {
+
     private Map<Atividade, Map<String, Tarefa>> tarefas;
+    private Map<Atividade, Map<String, TarefaGerencial>> tarefasGerenciais;
     private AtividadeController atividadeController;
     private PessoaController pessoaController;
 
-    public TarefaController(Map<Atividade, Map<String, Tarefa>> tarefas, AtividadeController atividadeController, PessoaController pessoaController) {
+    public TarefaController(Map<Atividade, Map<String, Tarefa>> tarefas, Map<Atividade, Map<String, TarefaGerencial>> tarefasGerenciais, AtividadeController atividadeController, PessoaController pessoaController) {
         this.tarefas = tarefas;
         this.atividadeController = atividadeController;
         this.pessoaController = pessoaController;
+        this.tarefasGerenciais = tarefasGerenciais;
     }
 
     public String cadastrarTarefa(String atividadeId, String nome, String[] habilidades) {
@@ -111,6 +115,49 @@ public class TarefaController {
         return Optional.empty();
     }
 
+    private Optional<TarefaGerencial> recuperarTarefaGerencial(String id) {
+        for (Map<String, TarefaGerencial> tarefasPorAtividade : this.tarefasGerenciais.values()) {
+            if (Objects.nonNull(tarefasPorAtividade.get(id))) {
+                return Optional.of(tarefasPorAtividade.get(id));
+            }
+        }
+        return Optional.empty();
+    }
 
+    public String cadastrarTarefaGerencial(String atividadeId, String nome, String[] habilidades, String[] idTarefas) {
+        Atividade atividade = this.atividadeController.validarIdAtividade(atividadeId);
+        this.validarParametro(nome, "nome");
+        int numeroNovaTarefa = this.calcularQuantidadeTarefas();
+        String idNovaTarefa = atividadeId + "-" + numeroNovaTarefa;
+        TarefaGerencial novaTarefa = new TarefaGerencial(idNovaTarefa, nome, 0, atividade);
+        atividade.cadastrarTarefaGerencial(novaTarefa);
+        boolean atividadeNaoTemTarefaGerencial = Objects.isNull(this.tarefasGerenciais.get(atividade));
 
+        if (atividadeNaoTemTarefaGerencial) {
+            this.tarefasGerenciais.put(atividade, new HashMap<>());
+        }
+
+        for (String id : idTarefas) {
+            Tarefa t = this.recuperarTarefa(id).get();
+            novaTarefa.addSubtarefa(t);
+        }
+
+        this.tarefasGerenciais.get(atividade).put(idNovaTarefa, novaTarefa);
+
+        return idNovaTarefa;
+    }
+
+    public void adicionarNaTarefaGerencial(String idTarefaGerencial, String idTarefa) {
+        Tarefa t = this.recuperarTarefa(idTarefa).get();
+        this.recuperarTarefaGerencial(idTarefaGerencial).get().addSubtarefa(t);
+    }
+
+    public void removerDaTarefaGerencial(String idTarefaGerencial, String idTarefa) {
+        Tarefa t = this.recuperarTarefa(idTarefa).get();
+        this.recuperarTarefaGerencial(idTarefaGerencial).get().removerTarefa(t);
+    }
+
+    public int contarTodasTarefasNaTarefaGerencial(String idTarefaGerencial) {
+        return this.recuperarTarefaGerencial(idTarefaGerencial).get().contarTarefas();
+    }
 }
