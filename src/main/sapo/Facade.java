@@ -1,11 +1,13 @@
 package sapo;
 
 import sapo.controllers.AtividadeController;
-import sapo.controllers.TarefaController;
+import sapo.controllers.BuscaController;
 import sapo.controllers.PessoaController;
+import sapo.controllers.TarefaController;
 import sapo.entities.Atividade;
-
 import sapo.entities.Pessoa;
+import sapo.repositories.PessoaRepository;
+import sapo.services.PessoaService;
 
 import java.util.HashMap;
 import java.util.NoSuchElementException;
@@ -16,11 +18,21 @@ public class Facade {
     private AtividadeController atividadeController;
     private TarefaController tarefaController;
     private PessoaController pessoaController;
+    private BuscaController buscaController;
+
+    private PessoaService pessoaService;
+
+    private PessoaRepository pessoaRepository;
 
     public Facade() {
-        this.pessoaController = new PessoaController(new HashMap<>());
+        this.pessoaRepository = new PessoaRepository(new HashMap<>());
+
+        this.pessoaService = new PessoaService(this.pessoaRepository);
+
+        this.pessoaController = new PessoaController(this.pessoaService);
         this.atividadeController = new AtividadeController(new HashMap<>(), this.pessoaController);
-        this.tarefaController = new TarefaController(new HashMap<>(), new HashMap<>(), this.atividadeController, this.pessoaController);
+        this.tarefaController = new TarefaController( new HashMap<>(), new HashMap<>(), this.atividadeController, this.pessoaController);
+        this.buscaController = new BuscaController(this.pessoaService);
     }
 
     public void cadastrarPessoa(String cpf, String nome, String[] habilidades) {
@@ -169,6 +181,37 @@ public class Facade {
 
     public int contarTodasTarefasNaTarefaGerencial(String idTarefaGerencial) {
         return this.tarefaController.contarTodasTarefasNaTarefaGerencial(idTarefaGerencial);
+    }
+
+    public String[] exibirPessoas(String consulta) {
+        return this.buscaController.exibirPessoas(consulta);
+    }
+
+    public String[] buscarAtividade(String consulta) {
+        return this.buscaController.buscarAtividade(consulta);
+    }
+
+    public String[] buscarTarefas(String nome) {
+        return this.buscaController.buscarTarefas(nome);
+    }
+
+    public String[] buscarTarefas(String idAtividade, String nome) {
+        return this.buscaController.buscarTarefas(idAtividade, nome);
+
+    }
+
+    public String[] sugerirTarefas(String id, String cpf) {
+        return this.buscaController.sugerirTarefas(id, cpf);
+    }
+
+    public String[] buscasMaisRecentes(int nBuscas) {
+        return this.buscaController.buscasMaisRecentes(nBuscas);
+
+    }
+
+    public String[] exibirHistoricoBusca(int indexBusca) {
+        return this.buscaController.exibirHistoricoBusca(indexBusca);
+
     }
 
 }

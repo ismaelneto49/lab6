@@ -1,143 +1,73 @@
 package sapo.controllers;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.NoSuchElementException;
-
-import sapo.entities.Comentario;
 import sapo.entities.Pessoa;
-import sapo.entities.Tarefa;
+import sapo.services.PessoaService;
 
 public class PessoaController {
 
-    private Map<String, Pessoa> pessoas;
+    private PessoaService pessoaService;
 
-    public PessoaController(Map<String, Pessoa> pessoas) {
-        this.pessoas = pessoas;
+    public PessoaController(PessoaService pessoaService) {
+        this.pessoaService = pessoaService;
     }
 
     public void cadastrarPessoa(String cpf, String nome, String[] habilidades) {
-        this.validarCampoVazio(cpf, "cpf");
-        this.validarCampoVazio(nome, "nome");
-
-        Pessoa p = new Pessoa(cpf, nome, habilidades);
-        this.pessoas.put(cpf, p);
+        this.pessoaService.cadastrarPessoa(cpf, nome, habilidades);
     }
 
     public void cadastrarAluno(String cpf, String nome, String matricula, int periodo, String[] habilidades) {
-        this.validarCampoVazio(cpf, "cpf");
-        this.validarCampoVazio(nome, "nome");
-        this.validarCampoVazio(matricula, "matricula");
-
-        Pessoa p = new Pessoa(cpf, nome, habilidades);
-        p.setFuncaoAluno(matricula, periodo);
-        this.pessoas.put(cpf, p);
-
+        this.pessoaService.cadastrarAluno(cpf, nome, matricula, periodo, habilidades);
     }
 
     public void cadastrarProfessor(String cpf, String nome, String siape, String[] disciplinas, String[] habilidades) {
-        this.validarCampoVazio(cpf, "cpf");
-        this.validarCampoVazio(nome, "nome");
-        this.validarCampoVazio(siape, "siape");
-
-        Pessoa p = new Pessoa(cpf, nome, habilidades);
-        p.setFuncaoProfessor(siape, disciplinas);
-        this.pessoas.put(cpf, p);
+        this.pessoaService.cadastrarProfessor(cpf, nome, siape, disciplinas, habilidades);
     }
 
     public Pessoa recuperarPessoa(String cpf) {
-        this.validarContemCpf(cpf);
-
-        return this.pessoas.get(cpf);
+        return this.pessoaService.recuperarPessoa(cpf);
     }
 
     public String exibirPessoa(String cpf) {
-        this.validarContemCpf(cpf);
-
-        return this.recuperarPessoa(cpf).toString();
+        return this.pessoaService.exibirPessoa(cpf);
     }
 
     public void alterarNomePessoa(String cpf, String nome) {
-        this.validarContemCpf(cpf);
-        this.validarCampoVazio(nome, "nome");
-
-        Pessoa p = this.recuperarPessoa(cpf);
-        p.setNome(nome);
+        this.pessoaService.alterarNomePessoa(cpf, nome);
     }
 
     public void alterarHabilidadesPessoa(String cpf, String[] habilidades) {
-        this.validarContemCpf(cpf);
-
-        this.recuperarPessoa(cpf).setHabilidades(habilidades);
+        this.pessoaService.alterarHabilidadesPessoa(cpf, habilidades);
     }
 
     public void definirFuncaoAluno(String cpf, String matricula, int periodo) {
-        this.validarContemCpf(cpf);
-        this.recuperarPessoa(cpf).setFuncaoAluno(matricula, periodo);
+        this.pessoaService.definirFuncaoAluno(cpf, matricula, periodo);
     }
 
     public void definirFuncaoProfessor(String cpf, String siape, String[] disciplinas) {
-        this.validarContemCpf(cpf);
-        this.recuperarPessoa(cpf).setFuncaoProfessor(siape, disciplinas);
+        this.pessoaService.definirFuncaoProfessor(cpf, siape, disciplinas);
     }
 
     public void removerFuncao(String cpf) {
-        this.validarContemCpf(cpf);
-        this.recuperarPessoa(cpf).removerFuncao();
+        this.pessoaService.removerFuncao(cpf);
     }
 
     public int pegarNivel(String cpf) {
-        this.validarContemCpf(cpf);
-        Pessoa pessoa = this.recuperarPessoa(cpf);
-        return pessoa.getNivel();
+        return this.pessoaService.pegarNivel(cpf);
     }
 
     public String[] listarPessoas() {
-        List<Pessoa> pessoas = new ArrayList<>(this.pessoas.values());
-        String[] pessoasString = new String[pessoas.size()];
-
-        for (int i = 0; i < pessoasString.length; i ++) {
-            pessoasString[i] = pessoas.get(i).toString();
-        }
-
-        return pessoasString;
+        return this.pessoaService.listarPessoas();
     }
 
     public void removerPessoa(String cpf) {
-        this.validarContemCpf(cpf);
-
-        this.pessoas.remove(cpf);
+        this.pessoaService.removerPessoa(cpf);
     }
 
     public void adicionarComentario(String destinatarioCpf, String comentario, String autorCpf) {
-        this.validarContemCpf(destinatarioCpf);
-        this.validarContemCpf(autorCpf);
-        this.validarCampoVazio(comentario, "comentario");
-
-        Pessoa autor = this.recuperarPessoa(autorCpf);
-        Pessoa destinatario = this.recuperarPessoa(destinatarioCpf);
-        Comentario c = new Comentario(comentario, LocalDate.now(), autor, destinatario);
-        destinatario.adicionarComentario(c);
+        this.pessoaService.adicionarComentario(destinatarioCpf, comentario, autorCpf);
     }
 
     public String listarComentarios(String cpf) {
-        this.validarContemCpf(cpf);
-
-        return this.recuperarPessoa(cpf).listarComentarios();
-    }
-
-    private void validarContemCpf(String cpf) {
-        if (!this.pessoas.keySet().contains(cpf)) {
-            throw new NoSuchElementException("CPF fornecido não pertence a nenhuma Pessoa");
-        }
-    }
-
-    private void validarCampoVazio(String field, String fieldName) {
-        if (field == null || field.isBlank()) {
-            String message = "Campo " + fieldName.trim() + " não pode ser vazio";
-            throw new IllegalArgumentException(message);
-        }
+        return this.pessoaService.listarComentarios(cpf);
     }
 }

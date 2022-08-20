@@ -19,8 +19,6 @@ public class AtividadeControllerTest {
         facade.cadastrarPessoa("111.111.111-11", "Cristovo", new String[]{});
     }
 
-    // ########### Tests for Atividade (remove later) ###########//
-
     @Test
     void testCadastrarAtividade() {
         String id1 = this.facade.cadastrarAtividade("legal", "descricao", "111.111.111-11");
@@ -171,5 +169,4 @@ public class AtividadeControllerTest {
             assertEquals("CPF fornecido não pertence a nenhuma Pessoa", nsee.getMessage());
         }
     }
-
 }

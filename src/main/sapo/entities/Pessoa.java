@@ -1,5 +1,7 @@
 package sapo.entities;
 
+import sapo.interfaces.Funcao;
+
 import java.util.*;
 
 public class Pessoa {
@@ -23,7 +25,6 @@ public class Pessoa {
         this.tarefasContabilizadas = new HashMap<>();
         this.tarefas = new HashMap<>();
     }
-
 
     public void setFuncaoAluno(String matricula, int periodo) {
         if (this.funcao.isPresent() && this.funcao.get() instanceof Aluno) {
@@ -61,9 +62,12 @@ public class Pessoa {
         this.tarefas.remove(tarefa.getId());
     }
 
-
     public String getNome() {
         return this.nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
     }
 
     public int getNivel() {
@@ -74,10 +78,6 @@ public class Pessoa {
         return this.habilidades;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
     public void setHabilidades(String[] habilidades) {
         this.habilidades = habilidades;
     }
@@ -85,7 +85,6 @@ public class Pessoa {
     public void adicionarComentario(Comentario comentario) {
         this.comentarios.add(comentario);
     }
-
 
     public String listarComentarios() {
         StringBuilder builder = new StringBuilder();
@@ -99,7 +98,6 @@ public class Pessoa {
 
     private int calcularNivel() {
         Map<String, Tarefa> tarefasASeremContabilizadas = this.calcularTarefasASeremContabilizadas();
-
 
         if (this.funcao.isPresent()) {
             return this.funcao.get().incrementarNivel(tarefasASeremContabilizadas, this);
@@ -140,7 +138,6 @@ public class Pessoa {
 
     }
 
-
     @Override
     public String toString() {
         String presentation = this.nome + " – " + this.cpf + "\n";
@@ -168,5 +165,9 @@ public class Pessoa {
         Pessoa pessoa = (Pessoa) object;
 
         return this.cpf == pessoa.cpf;
+    }
+
+    public boolean hasHabilidade(String habilidade) {
+        return Arrays.asList(this.habilidades).contains(habilidade.toLowerCase());
     }
 }

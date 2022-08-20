@@ -7,9 +7,9 @@ import sapo.entities.Pessoa;
 import java.util.NoSuchElementException;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class PessoaControllerTest {
+
     private Facade facade;
 
     @BeforeEach
@@ -17,10 +17,12 @@ public class PessoaControllerTest {
         this.facade = new Facade();
         facade.cadastrarPessoa("000.000.000-00", "Irmael", new String[]{});
         facade.cadastrarPessoa("111.111.111-11", "Cristovo", new String[]{});
-
     }
 
-    // ########### Tests for Pessoa (remove later) ###########//
+    @Test
+    void testCadastrarPessoa() {
+        this.facade.cadastrarPessoa("123.123.123-12", "Teobaldo", new String[]{"hab1"});
+    }
 
     @Test
     void testCadastrarPessoaCpfInvalido() {
