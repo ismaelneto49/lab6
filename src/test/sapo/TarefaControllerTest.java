@@ -133,12 +133,6 @@ public class TarefaControllerTest {
     }
 
     @Test
-    void testRemoverTarefa() {
-        String id = this.facade.cadastrarTarefa(this.idAtividade, "tarefa", new String[]{"hab1", "hab3"});
-        this.facade.removerTarefa(id);
-    }
-
-    @Test
     void testExibirTarefa() {
         String id = this.facade.cadastrarTarefa(this.idAtividade, "tarefa", new String[]{"hab1", "hab3"});
         String resultado = this.facade.exibirTarefa(id);
