@@ -1,9 +1,6 @@
 package sapo.controllers;
 
-import sapo.entities.BuscaAtividade;
-import sapo.entities.BuscaPessoa;
-import sapo.entities.BuscaTarefa;
-import sapo.entities.HistoricoBusca;
+import sapo.entities.*;
 import sapo.interfaces.Busca;
 import sapo.repositories.AtividadeRepository;
 import sapo.repositories.PessoaRepository;
@@ -57,8 +54,12 @@ public class BuscaController {
         return resultado;
     }
 
-    public String[] sugerirTarefas(String id, String cpf) {
-        return null;
+    public String[] sugerirTarefas(String cpf) {
+        String[] termos = new String[]{cpf};
+        Busca buscaSugestao = new BuscaSugestao(this.tarefaRepository, this.pessoaRepository, termos);
+        String[] resultado = buscaSugestao.buscar(termos);
+        this.historicoBusca.save(buscaSugestao);
+        return resultado;
     }
 
     public String[] buscasMaisRecentes(int nBuscas) {

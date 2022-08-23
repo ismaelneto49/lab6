@@ -203,4 +203,33 @@ public class TarefaRepository {
         Collections.sort(resultadoLista, Collections.reverseOrder());
         return resultadoLista.toArray(new String[]{});
     }
+
+    public String[] sugerir(Pessoa pessoa) {
+        List<String> ondeBuscar = new ArrayList<>();
+        for (Map<String, Tarefa> mapTarefas : this.tarefas.values()) {
+            for (Tarefa t : mapTarefas.values()) {
+                for (String habilidade : t.getHabilidades()) {
+                    ondeBuscar.add(t.getId() + "__" + habilidade);
+                }
+            }
+        }
+        for (Map<String, TarefaGerencial> mapGerenciais : this.tarefasGerenciais.values()) {
+            for (TarefaGerencial t : mapGerenciais.values()) {
+                for (String habilidade : t.getHabilidades()) {
+                    ondeBuscar.add(t.getId() + "__" + habilidade);
+                }
+            }
+        }
+        Set<String> resultado = new HashSet<>();
+        for (String habilidade : pessoa.getHabilidades()) {
+            for (String termo : ondeBuscar) {
+                if (termo.contains(habilidade)) {
+                    String id = termo.split("__")[0];
+                    Tarefa tarefa = this.getTarefaById(id);
+                    resultado.add(tarefa.toString());
+                }
+            }
+        }
+        return resultado.toArray(new String[]{});
+    }
 }

@@ -198,8 +198,8 @@ public class Facade {
 
     }
 
-    public String[] sugerirTarefas(String id, String cpf) {
-        return this.buscaController.sugerirTarefas(id, cpf);
+    public String[] sugerirTarefas(String cpf) {
+        return this.buscaController.sugerirTarefas(cpf);
     }
 
     public String[] buscasMaisRecentes(int nBuscas) {
