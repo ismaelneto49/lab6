@@ -118,5 +118,9 @@ public class Atividade {
         }
         this.tarefasGerenciais.add(tarefa);
     }
+
+    public String getDescricao() {
+        return this.descricao;
+    }
 }
 

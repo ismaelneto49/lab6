@@ -30,7 +30,7 @@ public class Facade {
         this.pessoaController = new PessoaController(pessoaRepository);
         this.atividadeController = new AtividadeController(pessoaRepository, atividadeRepository);
         this.tarefaController = new TarefaController(pessoaRepository, atividadeRepository, tarefaRepository);
-        this.buscaController = new BuscaController(pessoaRepository);
+        this.buscaController = new BuscaController(pessoaRepository, atividadeRepository, tarefaRepository);
     }
 
     public void cadastrarPessoa(String cpf, String nome, String[] habilidades) {

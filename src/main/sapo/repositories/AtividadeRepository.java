@@ -4,8 +4,10 @@ import sapo.entities.Atividade;
 import sapo.entities.Pessoa;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class AtividadeRepository {
+
     private Map<Pessoa, Map<String, Atividade>> atividades;
 
     public AtividadeRepository(Map<Pessoa, Map<String, Atividade>> atividades) {
@@ -92,5 +94,28 @@ public class AtividadeRepository {
         return quantidadeAtividades;
     }
 
+    public String[] buscar(String[] termos) {
+        List<String> ondeBuscar = new ArrayList<>();
+        for (Map<String, Atividade> map : this.atividades.values()) {
+            ondeBuscar.addAll(map.keySet());
+            ondeBuscar.addAll(map.values().stream().map(a -> a.getId() + "__" + a.getNome().toLowerCase()).collect(Collectors.toList()));
+            ondeBuscar.addAll(map.values().stream().map(a -> a.getId() + "__" + a.getDescricao().toLowerCase()).collect(Collectors.toList()));
+        }
 
+        Set<String> resultado = new HashSet<>();
+        for (String termo : termos) {
+            for (String busca : ondeBuscar) {
+                if (busca.contains(termo)) {
+                    if (busca.length() > termo.length()) {
+                        resultado.add(this.getAtividadeById(busca.split("__")[0]).toString());
+                    } else {
+                        resultado.add(this.getAtividadeById(busca).toString());
+                    }
+                }
+            }
+        }
+        String[] retorno = resultado.toArray(new String[]{});
+        Arrays.sort(retorno);
+        return retorno;
+    }
 }
