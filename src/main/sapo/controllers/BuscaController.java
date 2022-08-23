@@ -2,6 +2,7 @@ package sapo.controllers;
 
 import sapo.entities.BuscaAtividade;
 import sapo.entities.BuscaPessoa;
+import sapo.entities.BuscaTarefa;
 import sapo.entities.HistoricoBusca;
 import sapo.interfaces.Busca;
 import sapo.repositories.AtividadeRepository;
@@ -41,11 +42,19 @@ public class BuscaController {
     }
 
     public String[] buscarTarefas(String nome) {
-        return null;
+        String[] termos = new String[]{nome};
+        Busca buscaTarefa = new BuscaTarefa(this.tarefaRepository, this.atividadeRepository, termos);
+        String[] resultado = buscaTarefa.buscar(termos);
+        this.historicoBusca.save(buscaTarefa);
+        return resultado;
     }
 
     public String[] buscarTarefas(String idAtividade, String nome) {
-        return null;
+        String[] termos = new String[]{idAtividade, nome};
+        Busca buscaTarefa = new BuscaTarefa(this.tarefaRepository, this.atividadeRepository, termos);
+        String[] resultado = buscaTarefa.buscar(termos);
+        this.historicoBusca.save(buscaTarefa);
+        return resultado;
     }
 
     public String[] sugerirTarefas(String id, String cpf) {
@@ -53,11 +62,7 @@ public class BuscaController {
     }
 
     public String[] buscasMaisRecentes(int nBuscas) {
-        String[] resultado = Arrays.asList(this.historicoBusca.buscasMaisRecentes(nBuscas))
-                .stream()
-                .map(b -> b.replaceAll("_", " ").trim())
-                .collect(Collectors.toList())
-                .toArray(new String[]{});
+        String[] resultado = Arrays.asList(this.historicoBusca.buscasMaisRecentes(nBuscas)).stream().map(b -> b.replaceAll("_", " ").trim()).collect(Collectors.toList()).toArray(new String[]{});
         return resultado;
     }
 

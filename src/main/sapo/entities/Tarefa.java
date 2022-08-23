@@ -31,6 +31,10 @@ public class Tarefa {
         return this.id;
     }
 
+    public String getNome() {
+        return this.nome;
+    }
+
     public void setNome(String novoNome) {
         this.nome = novoNome;
     }

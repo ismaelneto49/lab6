@@ -158,4 +158,49 @@ public class TarefaRepository {
         return quantidadeTarefas;
     }
 
+    public String[] buscar(String nome) {
+        List<String> ondeBuscar = new ArrayList<>();
+        for (Map<String, Tarefa> mapTarefas : this.tarefas.values()) {
+            for (Tarefa t : mapTarefas.values()) {
+                ondeBuscar.add(t.getId() + "__" + t.getNome());
+            }
+        }
+        for (Map<String, TarefaGerencial> mapGerenciais : this.tarefasGerenciais.values()) {
+            for (TarefaGerencial t : mapGerenciais.values()) {
+                ondeBuscar.add(t.getId() + "__" + t.getNome());
+            }
+        }
+        Set<String> resultado = new HashSet<>();
+        for (String nomeTarefa : ondeBuscar) {
+            if (nomeTarefa.contains(nome)) {
+                resultado.add(this.getTarefaById(nomeTarefa.split("__")[0]).toString());
+            }
+        }
+        List<String> resultadoLista = new ArrayList<>(resultado);
+        Collections.sort(resultadoLista, Collections.reverseOrder());
+        return resultadoLista.toArray(new String[]{});
+    }
+
+    public String[] buscar(Atividade atividade, String nome) {
+        List<String> ondeBuscar = new ArrayList<>();
+        if (this.tarefas.get(atividade) != null) {
+            for (Tarefa t : this.tarefas.get(atividade).values()) {
+                ondeBuscar.add(t.getId() + "__" + t.getNome());
+            }
+        }
+        if (this.tarefasGerenciais.get(atividade) != null) {
+            for (TarefaGerencial t : this.tarefasGerenciais.get(atividade).values()) {
+                ondeBuscar.add(t.getId() + "__" + t.getNome());
+            }
+        }
+        Set<String> resultado = new HashSet<>();
+        for (String nomeTarefa : ondeBuscar) {
+            if (nomeTarefa.contains(nome)) {
+                resultado.add(this.getTarefaById(nomeTarefa.split("__")[0]).toString());
+            }
+        }
+        List<String> resultadoLista = new ArrayList<>(resultado);
+        Collections.sort(resultadoLista, Collections.reverseOrder());
+        return resultadoLista.toArray(new String[]{});
+    }
 }

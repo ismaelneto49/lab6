@@ -144,7 +144,6 @@ public class TarefaController {
         if (this.tarefaRepository.containsTarefaGerencial(id)) {
             return this.tarefaRepository.getTarefaGerencialById(id);
         }
-
         throw new NoSuchElementException("O id passado não pertence a nenhuma atividade gerencial");
     }
 
