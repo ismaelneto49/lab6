@@ -149,10 +149,6 @@ public class Facade {
         this.tarefaController.concluirTarefa(idTarefa);
     }
 
-    public void removerTarefa(String idTarefa) {
-        throw new NoSuchElementException("Not yet implemented");
-    }
-
     public String exibirTarefa(String idTarefa) {
         return this.tarefaController.exibirTarefa(idTarefa);
     }
