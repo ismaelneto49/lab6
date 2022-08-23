@@ -9,7 +9,6 @@ import sapo.entities.Pessoa;
 import sapo.repositories.AtividadeRepository;
 import sapo.repositories.PessoaRepository;
 import sapo.repositories.TarefaRepository;
-import sapo.services.PessoaService;
 
 import java.util.HashMap;
 import java.util.NoSuchElementException;
@@ -28,13 +27,10 @@ public class Facade {
         AtividadeRepository atividadeRepository = new AtividadeRepository(new HashMap<>());
         TarefaRepository tarefaRepository = new TarefaRepository(new HashMap<>(), new HashMap<>());
 
-        // TODO: Remove PessoaService
-        PessoaService pessoaService = new PessoaService(pessoaRepository);
-
-        this.pessoaController = new PessoaController(pessoaService);
+        this.pessoaController = new PessoaController(pessoaRepository);
         this.atividadeController = new AtividadeController(pessoaRepository, atividadeRepository);
         this.tarefaController = new TarefaController(pessoaRepository, atividadeRepository, tarefaRepository);
-        this.buscaController = new BuscaController(pessoaService);
+        this.buscaController = new BuscaController(pessoaRepository);
     }
 
     public void cadastrarPessoa(String cpf, String nome, String[] habilidades) {
